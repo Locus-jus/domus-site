@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getStoredInscriptions } from "@/data/inscriptions";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 import { formatLabels, participationLabels, type Debate } from "@/data/debates";
@@ -11,6 +13,19 @@ interface DebateCardProps {
 }
 
 export default function DebateCard({ debate, className }: DebateCardProps) {
+  const [participantCount, setParticipantCount] = useState(debate.currentParticipants || 0);
+
+  useEffect(() => {
+    const refresh = () => setParticipantCount(getStoredInscriptions().filter((item) => item.debateId === debate.id).length);
+    refresh();
+    window.addEventListener("domus:inscriptions-changed", refresh);
+    window.addEventListener("storage", refresh);
+    return () => {
+      window.removeEventListener("domus:inscriptions-changed", refresh);
+      window.removeEventListener("storage", refresh);
+    };
+  }, [debate.id]);
+
   return (
     <Link href={`/debates/${debate.slug}`}>
       <article
@@ -64,6 +79,9 @@ export default function DebateCard({ debate, className }: DebateCardProps) {
         </p>
 
         <div className="space-y-2 mb-6">
+          <div className="text-sm text-domus-text-muted">
+            <span className="font-semibold text-domus-text">{participantCount}</span>{debate.maxParticipants ? `/${debate.maxParticipants}` : ""} inscritos
+          </div>
           <div className="flex items-center gap-2 text-sm text-domus-text-muted">
             <Calendar className="w-4 h-4" />
             <span>{new Date(debate.date).toLocaleDateString("pt-BR")}</span>

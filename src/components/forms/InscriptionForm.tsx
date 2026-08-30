@@ -54,6 +54,19 @@ export default function InscriptionForm({
       category: formData.category,
       phone: formData.phone,
     });
+    window.dispatchEvent(new Event("domus:inscriptions-changed"));
+    const emailBody = [
+      `Nova inscrição: ${debateTitle}`,
+      "",
+      `Nome: ${formData.name}`,
+      `E-mail: ${formData.email}`,
+      `Sociedade: ${formData.society === "outra" ? formData.customSociety : formData.society}`,
+      `Instituição: ${formData.institution || "Não informada"}`,
+      `Categoria: ${formData.category}`,
+      `Telefone: ${formData.phone || "Não informado"}`,
+      `Membro DOMUS: ${isDomusMember ? "Sim" : "Não"}`,
+    ].join("\n");
+    window.location.href = `mailto:domusdebateseoratoria@gmail.com?subject=${encodeURIComponent(`Inscrição - ${debateTitle}`)}&body=${encodeURIComponent(emailBody)}`;
     setSubmitted(true);
   };
 

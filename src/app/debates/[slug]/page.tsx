@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { getDebateBySlug, formatLabels, participationLabels } from "@/data/debates";
 import { getJudgesForDebate } from "@/data/judges";
 import { getManagedDebates } from "@/components/admin/DebateManager";
+import { getStoredInscriptions } from "@/data/inscriptions";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import InscriptionForm from "@/components/forms/InscriptionForm";
@@ -31,10 +32,22 @@ export default function DebatePage({
   const { slug } = use(params);
   const [debate, setDebate] = useState(() => getDebateBySlug(slug));
   const [loaded, setLoaded] = useState(false);
+  const [participantCount, setParticipantCount] = useState(0);
 
   useEffect(() => {
     setDebate(getManagedDebates().find((item) => item.slug === slug));
+    setParticipantCount(getStoredInscriptions().filter((item) => item.debateId === (getManagedDebates().find((item) => item.slug === slug)?.id)).length);
     setLoaded(true);
+  }, [slug]);
+
+  useEffect(() => {
+    const refresh = () => {
+      const current = getManagedDebates().find((item) => item.slug === slug);
+      setParticipantCount(current ? getStoredInscriptions().filter((item) => item.debateId === current.id).length : 0);
+    };
+    window.addEventListener("domus:inscriptions-changed", refresh);
+    window.addEventListener("storage", refresh);
+    return () => { window.removeEventListener("domus:inscriptions-changed", refresh); window.removeEventListener("storage", refresh); };
   }, [slug]);
 
   if (!loaded) {
@@ -148,7 +161,7 @@ export default function DebatePage({
                     </p>
                     {debate.maxParticipants && (
                       <p className="text-xs text-domus-text-muted mt-2">
-                        {debate.currentParticipants || 0} inscritos de{" "}
+                        {participantCount} inscritos de{" "}
                         {debate.maxParticipants} vagas
                       </p>
                     )}
@@ -286,7 +299,7 @@ export default function DebatePage({
                         <div className="mb-4">
                           <div className="flex justify-between text-xs text-domus-text-muted mb-1">
                             <span>
-                              {debate.currentParticipants || 0} inscritos
+                              {participantCount} inscritos
                             </span>
                             <span>{debate.maxParticipants} vagas</span>
                           </div>
@@ -294,7 +307,7 @@ export default function DebatePage({
                             <div
                               className="h-full bg-domus-primary rounded-full transition-all"
                               style={{
-                                width: `${((debate.currentParticipants || 0) / debate.maxParticipants) * 100}%`,
+                                width: `${Math.min((participantCount / debate.maxParticipants) * 100, 100)}%`,
                               }}
                             />
                           </div>
