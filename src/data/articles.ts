@@ -7,6 +7,7 @@ export interface Article {
   date: string;
   readTime: string;
   coverGradient?: string;
+  pdfUrl?: string;
 }
 
 export const articles: Article[] = [

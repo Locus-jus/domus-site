@@ -33,6 +33,7 @@ export default function Articles() {
               author={article.author}
               date={article.date}
               readTime={article.readTime}
+              pdfUrl={article.pdfUrl}
             />
           ))}
         </div>

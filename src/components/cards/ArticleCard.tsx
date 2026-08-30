@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight, Clock, FileText } from "lucide-react";
 
 interface ArticleCardProps {
   title: string;
@@ -10,6 +10,7 @@ interface ArticleCardProps {
   author: string;
   date: string;
   readTime: string;
+  pdfUrl?: string;
   className?: string;
 }
 
@@ -30,6 +31,7 @@ export default function ArticleCard({
   author,
   date,
   readTime,
+  pdfUrl,
   className,
 }: ArticleCardProps) {
   return (
@@ -71,10 +73,10 @@ export default function ArticleCard({
             <span>{new Date(date).toLocaleDateString("pt-BR")}</span>
           </div>
 
-          <button className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary hover:text-domus-primary-dark transition-colors group/btn">
-            Ler artigo
+           {pdfUrl ? <a href={pdfUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary hover:text-domus-primary-dark transition-colors group/btn">
+            <FileText className="w-4 h-4" /> Ler PDF
             <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-          </button>
+          </a> : <span className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary">Ler artigo <ArrowRight className="w-4 h-4" /></span>}
         </div>
       </div>
     </article>
