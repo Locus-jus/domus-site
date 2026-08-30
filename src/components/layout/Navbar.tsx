@@ -83,7 +83,7 @@ export default function Navbar() {
 
           {/* Desktop User / Admin links */}
           <div className="hidden md:flex items-center gap-4">
-            {!isLoading && user ? (
+            {user ? (
               <>
                 <Link
                   href="/perfil"
