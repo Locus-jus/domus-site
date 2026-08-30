@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="40" fill="#0B7285"/>
+  
+  <!-- Shield outline -->
+  <path d="M256 60 L400 120 L400 280 Q400 400 256 460 Q112 400 112 280 L112 120 Z" 
+        stroke="white" stroke-width="4" fill="none" stroke-linejoin="round"/>
+  
+  <!-- Ionic Column Capital -->
+  <!-- Left volute -->
+  <circle cx="195" cy="135" r="22" stroke="white" stroke-width="3.5" fill="none"/>
+  <circle cx="195" cy="135" r="10" stroke="white" stroke-width="2.5" fill="none"/>
+  <!-- Right volute -->
+  <circle cx="317" cy="135" r="22" stroke="white" stroke-width="3.5" fill="none"/>
+  <circle cx="317" cy="135" r="10" stroke="white" stroke-width="2.5" fill="none"/>
+  <!-- Column top bar -->
+  <rect x="175" y="155" width="162" height="6" rx="2" stroke="white" stroke-width="3" fill="none"/>
+  <!-- Column neck -->
+  <rect x="220" y="161" width="72" height="14" rx="2" stroke="white" stroke-width="3" fill="none"/>
+  <!-- Column shaft lines -->
+  <line x1="230" y1="175" x2="230" y2="200" stroke="white" stroke-width="2.5"/>
+  <line x1="256" y1="175" x2="256" y2="200" stroke="white" stroke-width="2.5"/>
+  <line x1="282" y1="175" x2="282" y2="200" stroke="white" stroke-width="2.5"/>
+  
+  <!-- Open Book -->
+  <!-- Left page -->
+  <path d="M256 200 Q220 205 165 220 L165 340 Q220 325 256 320 Z" 
+        stroke="white" stroke-width="3" fill="none" stroke-linejoin="round"/>
+  <!-- Right page -->
+  <path d="M256 200 Q292 205 347 220 L347 340 Q292 325 256 320 Z" 
+        stroke="white" stroke-width="3" fill="none" stroke-linejoin="round"/>
+  <!-- Book spine -->
+  <line x1="256" y1="200" x2="256" y2="320" stroke="white" stroke-width="3"/>
+  <!-- Page lines left -->
+  <line x1="185" y1="245" x2="245" y2="237" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="185" y1="265" x2="245" y2="257" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="185" y1="285" x2="245" y2="277" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="185" y1="305" x2="245" y2="297" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <!-- Page lines right -->
+  <line x1="267" y1="237" x2="327" y2="245" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="267" y1="257" x2="327" y2="265" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="267" y1="277" x2="327" y2="285" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <line x1="267" y1="297" x2="327" y2="305" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  
+  <!-- Crossed Gavels -->
+  <!-- Left gavel (handle from bottom-left to top-right) -->
+  <line x1="170" y1="370" x2="290" y2="250" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <!-- Left gavel head -->
+  <rect x="275" y="232" width="35" height="16" rx="4" transform="rotate(-45 292 240)" 
+        stroke="white" stroke-width="3" fill="none"/>
+  
+  <!-- Right gavel (handle from bottom-right to top-left) -->
+  <line x1="342" y1="370" x2="222" y2="250" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <!-- Right gavel head -->
+  <rect x="202" y="232" width="35" height="16" rx="4" transform="rotate(45 219 240)" 
+        stroke="white" stroke-width="3" fill="none"/>
+  
+  <!-- Sound block / base -->
+  <ellipse cx="256" cy="390" rx="55" ry="12" stroke="white" stroke-width="3" fill="none"/>
+</svg>

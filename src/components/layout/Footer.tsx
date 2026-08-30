@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -53,11 +54,13 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-5">
             <Link href="/" className="inline-flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-domus-primary rounded-[var(--radius-sm)] flex items-center justify-center">
-                <span className="font-[family-name:var(--font-playfair)] text-white text-xl font-bold">
-                  D
-                </span>
-              </div>
+              <Image
+                src="/domus-logo.svg"
+                alt="DOMUS"
+                width={40}
+                height={40}
+                className="w-10 h-10"
+              />
               <span className="font-[family-name:var(--font-playfair)] text-xl font-bold">
                 DOMUS
               </span>

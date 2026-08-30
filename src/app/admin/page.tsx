@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
+import AdminGate from "@/components/admin/AdminGate";
+import EventManager from "@/components/admin/EventManager";
 import { debates, formatLabels, participationLabels } from "@/data/debates";
 import { inscriptions, getInscriptionsByDebate } from "@/data/inscriptions";
 import { judges } from "@/data/judges";
@@ -22,10 +24,12 @@ import {
   Clock,
   ChevronRight,
   Plus,
+  Calendar,
 } from "lucide-react";
 
 type AdminTab =
   | "dashboard"
+  | "eventos"
   | "debates"
   | "inscricoes"
   | "jurados"
@@ -40,6 +44,7 @@ export default function AdminPage() {
 
   const tabs = [
     { key: "dashboard" as AdminTab, label: "Dashboard", icon: LayoutDashboard },
+    { key: "eventos" as AdminTab, label: "Eventos", icon: Calendar },
     { key: "debates" as AdminTab, label: "Debates", icon: FileText },
     { key: "inscricoes" as AdminTab, label: "Inscrições", icon: Users },
     { key: "jurados" as AdminTab, label: "Jurados", icon: Gavel },
@@ -62,7 +67,7 @@ export default function AdminPage() {
   });
 
   return (
-    <>
+    <AdminGate>
       <Navbar />
       <main className="flex-1 pt-20 min-h-screen bg-domus-background">
         <div className="max-w-7xl mx-auto px-6 md:px-8 py-8">
@@ -226,6 +231,9 @@ export default function AdminPage() {
               </div>
             </div>
           )}
+
+          {/* Eventos */}
+          {activeTab === "eventos" && <EventManager />}
 
           {/* Debates */}
           {activeTab === "debates" && (
@@ -564,6 +572,6 @@ export default function AdminPage() {
           )}
         </div>
       </main>
-    </>
+    </AdminGate>
   );
 }

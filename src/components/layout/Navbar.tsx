@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 
@@ -50,11 +51,14 @@ export default function Navbar() {
         <nav className="max-w-7xl mx-auto px-6 md:px-8 flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group" aria-label="DOMUS - Página inicial">
-            <div className="w-9 h-9 md:w-10 md:h-10 bg-domus-primary rounded-[var(--radius-sm)] flex items-center justify-center">
-              <span className="font-[family-name:var(--font-playfair)] text-white text-lg md:text-xl font-bold">
-                D
-              </span>
-            </div>
+            <Image
+              src="/domus-logo.svg"
+              alt="DOMUS"
+              width={40}
+              height={40}
+              className="w-9 h-9 md:w-10 md:h-10"
+              priority
+            />
             <div className="hidden sm:block">
               <span className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text group-hover:text-domus-primary transition-colors">
                 DOMUS

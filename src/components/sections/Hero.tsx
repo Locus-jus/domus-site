@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 
 export default function Hero() {
   return (
@@ -30,17 +31,21 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-8 text-center">
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-8"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 bg-domus-primary rounded-[var(--radius-md)] mb-6">
-            <span className="font-[family-name:var(--font-playfair)] text-white text-4xl md:text-5xl font-bold">
-              D
-            </span>
-          </div>
+          <Image
+            src="/domus-logo.svg"
+            alt="DOMUS"
+            width={120}
+            height={120}
+            className="w-20 h-20 md:w-28 md:h-28 mx-auto"
+            priority
+          />
         </motion.div>
 
         <motion.h1
