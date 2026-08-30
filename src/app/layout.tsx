@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth";
+import PhysicsCursor from "@/components/ui/PhysicsCursor";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -62,7 +63,10 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <PhysicsCursor />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

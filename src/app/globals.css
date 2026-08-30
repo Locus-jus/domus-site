@@ -120,6 +120,12 @@ body {
   outline-offset: 2px;
 }
 
+@media (pointer: coarse) {
+  .physics-cursor {
+    display: none;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
