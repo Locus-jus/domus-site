@@ -4,9 +4,18 @@ import Link from "next/link";
 import SectionHeader from "@/components/ui/SectionHeader";
 import DebateCard from "@/components/cards/DebateCard";
 import { getUpcomingDebates } from "@/data/debates";
+import { getManagedDebates } from "@/components/admin/DebateManager";
+import { useEffect, useState } from "react";
 
 export default function Debates() {
-  const upcoming = getUpcomingDebates();
+  const [upcoming, setUpcoming] = useState(getUpcomingDebates);
+
+  useEffect(() => {
+    const refresh = () => setUpcoming(getManagedDebates().filter((debate) => debate.status === "upcoming"));
+    refresh();
+    window.addEventListener("storage", refresh);
+    return () => window.removeEventListener("storage", refresh);
+  }, []);
 
   return (
     <section id="debates" className="py-24 md:py-32 bg-white">

@@ -1,10 +1,11 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDebateBySlug, formatLabels, participationLabels } from "@/data/debates";
 import { getJudgesForDebate } from "@/data/judges";
+import { getManagedDebates } from "@/components/admin/DebateManager";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import InscriptionForm from "@/components/forms/InscriptionForm";
@@ -28,7 +29,11 @@ export default function DebatePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
-  const debate = getDebateBySlug(slug);
+  const [debate, setDebate] = useState(() => getDebateBySlug(slug));
+
+  useEffect(() => {
+    setDebate(getManagedDebates().find((item) => item.slug === slug));
+  }, [slug]);
 
   if (!debate) {
     notFound();
