@@ -6,7 +6,6 @@ import Debates from "@/components/sections/Debates";
 import WhatWeDo from "@/components/sections/WhatWeDo";
 import WhyDomus from "@/components/sections/WhyDomus";
 import Events from "@/components/sections/Events";
-import Debaters from "@/components/sections/Debaters";
 import Articles from "@/components/sections/Articles";
 import History from "@/components/sections/History";
 
@@ -21,7 +20,6 @@ export default function Home() {
         <WhatWeDo />
         <WhyDomus />
         <Articles />
-        <Debaters />
         <History />
       </main>
       <Footer />
