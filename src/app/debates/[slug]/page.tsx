@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { getDebateBySlug, formatLabels, participationLabels } from "@/data/debates";
 import { getJudgesForDebate } from "@/data/judges";
 import { getManagedDebates } from "@/components/admin/DebateManager";
-import { getStoredInscriptions } from "@/data/inscriptions";
+import { getInscriptionCount } from "@/data/inscriptions";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import InscriptionForm from "@/components/forms/InscriptionForm";
@@ -36,14 +36,15 @@ export default function DebatePage({
 
   useEffect(() => {
     setDebate(getManagedDebates().find((item) => item.slug === slug));
-    setParticipantCount(getStoredInscriptions().filter((item) => item.debateId === (getManagedDebates().find((item) => item.slug === slug)?.id)).length);
+    const current = getManagedDebates().find((item) => item.slug === slug);
+    setParticipantCount(current ? getInscriptionCount(current.id, current.currentParticipants) : 0);
     setLoaded(true);
   }, [slug]);
 
   useEffect(() => {
     const refresh = () => {
       const current = getManagedDebates().find((item) => item.slug === slug);
-      setParticipantCount(current ? getStoredInscriptions().filter((item) => item.debateId === current.id).length : 0);
+      setParticipantCount(current ? getInscriptionCount(current.id, current.currentParticipants) : 0);
     };
     window.addEventListener("domus:inscriptions-changed", refresh);
     window.addEventListener("storage", refresh);

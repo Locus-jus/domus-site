@@ -61,6 +61,12 @@ export function getStoredInscriptions(): Inscription[] {
   }
 }
 
+export function getInscriptionCount(debateId: string, baseCount = 0): number {
+  const stored = getStoredInscriptions().filter((item) => item.debateId === debateId);
+  const original = inscriptions.filter((item) => item.debateId === debateId).length;
+  return baseCount + Math.max(0, stored.length - original);
+}
+
 function saveStoredInscriptions(items: Inscription[]) {
   localStorage.setItem(INSCRIPTIONS_STORAGE_KEY, JSON.stringify(items));
 }

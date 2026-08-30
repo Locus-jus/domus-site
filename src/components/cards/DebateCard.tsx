@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getStoredInscriptions } from "@/data/inscriptions";
+import { getInscriptionCount } from "@/data/inscriptions";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 import { formatLabels, participationLabels, type Debate } from "@/data/debates";
@@ -16,7 +16,7 @@ export default function DebateCard({ debate, className }: DebateCardProps) {
   const [participantCount, setParticipantCount] = useState(debate.currentParticipants || 0);
 
   useEffect(() => {
-    const refresh = () => setParticipantCount(getStoredInscriptions().filter((item) => item.debateId === debate.id).length);
+    const refresh = () => setParticipantCount(getInscriptionCount(debate.id, debate.currentParticipants));
     refresh();
     window.addEventListener("domus:inscriptions-changed", refresh);
     window.addEventListener("storage", refresh);
