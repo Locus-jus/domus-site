@@ -39,6 +39,14 @@ export default function DebateManager() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   };
 
+  const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || file.type !== "application/pdf") return;
+    const reader = new FileReader();
+    reader.onload = () => setForm((current) => ({ ...current, edital: String(reader.result) }));
+    reader.readAsDataURL(file);
+  };
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const next = editingId
@@ -88,6 +96,12 @@ export default function DebateManager() {
           <select value={form.participation} onChange={(e) => setForm({ ...form, participation: e.target.value as DebateParticipation })} className="px-4 py-3 rounded border border-domus-border bg-domus-background text-sm">{Object.entries(participationLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select>
           <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as Debate["status"] })} className="px-4 py-3 rounded border border-domus-border bg-domus-background text-sm"><option value="upcoming">Próximo</option><option value="past">Realizado</option></select>
           {input("edital", "Link do edital em PDF")}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-domus-text mb-1.5">Ou selecione o arquivo PDF</label>
+            <input type="file" accept="application/pdf,.pdf" onChange={handlePdfChange} className="block w-full text-sm text-domus-text-muted file:mr-3 file:rounded file:border-0 file:bg-domus-primary file:px-3 file:py-2 file:text-white" />
+            {form.edital?.startsWith("data:application/pdf") && <p className="text-xs text-green-700 mt-1">PDF selecionado e pronto para salvar.</p>}
+            <p className="text-xs text-domus-text-muted mt-1">O arquivo fica salvo neste navegador. Para disponibilizar para todos os usuários, prefira um link público.</p>
+          </div>
           {input("tabbycatUrl", "Link do Tabbycat")}
           <textarea required value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Descrição *" className="md:col-span-2 px-4 py-3 rounded border border-domus-border bg-domus-background text-sm" rows={3} />
           <textarea value={form.rules} onChange={(e) => setForm({ ...form, rules: e.target.value })} placeholder="Regras" className="md:col-span-2 px-4 py-3 rounded border border-domus-border bg-domus-background text-sm" rows={3} />
