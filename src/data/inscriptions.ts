@@ -78,7 +78,7 @@ export function getInscriptionsByDebate(debateId: string): Inscription[] {
 export function addInscription(inscription: Omit<Inscription, "id" | "status" | "createdAt">): Inscription {
   const newInscription: Inscription = {
     ...inscription,
-    id: String(inscriptions.length + 1),
+    id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `inscription_${Date.now()}_${Math.random().toString(36).slice(2)}`,
     status: "pendente",
     createdAt: new Date().toISOString().split("T")[0],
   };

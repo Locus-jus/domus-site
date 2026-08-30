@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getInscriptionCount } from "@/data/inscriptions";
+import { fetchCloudDebates } from "@/lib/supabase-data";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 import { formatLabels, participationLabels, type Debate } from "@/data/debates";
@@ -18,6 +19,10 @@ export default function DebateCard({ debate, className }: DebateCardProps) {
   useEffect(() => {
     const refresh = () => setParticipantCount(getInscriptionCount(debate.id, debate.currentParticipants));
     refresh();
+    void fetchCloudDebates().then((cloud) => {
+      const current = cloud?.find((item) => item.id === debate.id);
+      if (current) setParticipantCount(current.currentParticipants || 0);
+    });
     window.addEventListener("domus:inscriptions-changed", refresh);
     window.addEventListener("storage", refresh);
     return () => {
