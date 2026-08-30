@@ -30,10 +30,24 @@ export default function DebatePage({
 }) {
   const { slug } = use(params);
   const [debate, setDebate] = useState(() => getDebateBySlug(slug));
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setDebate(getManagedDebates().find((item) => item.slug === slug));
+    setLoaded(true);
   }, [slug]);
+
+  if (!loaded) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 pt-20 min-h-screen flex items-center justify-center bg-domus-background">
+          <p className="text-domus-text-muted">Carregando debate...</p>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   if (!debate) {
     notFound();
