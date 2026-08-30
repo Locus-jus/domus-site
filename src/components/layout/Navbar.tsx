@@ -14,6 +14,7 @@ const navLinks = [
   { href: "/#ideias", label: "Ideias" },
   { href: "/membros", label: "Membros" },
   { href: "/contato", label: "Contato" },
+  { href: "/login", label: "Entrar" },
 ];
 
 export default function Navbar() {
