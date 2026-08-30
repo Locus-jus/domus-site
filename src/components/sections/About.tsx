@@ -9,7 +9,7 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           title="Uma sociedade para o debate de ideias"
-          subtitle="A DOMUS existe para que ideias sejam confrontadas com argumentos, não com silêncio."
+          subtitle="A DOMUS promove o encontro entre ideias e argumentos em um ambiente de diálogo."
         />
 
         {/* Editorial content */}
@@ -23,8 +23,8 @@ export default function About() {
                 capazes de defender ideias com clareza, inteligência e respeito.
               </p>
               <p className="text-lg text-domus-text-secondary leading-relaxed">
-                Acreditamos que o debate é mais do que uma competição — é um
-                exercício de civilidade. É no confronto respeitoso de ideias que
+                 Acreditamos que o debate ultrapassa a competição e constitui um
+                 exercício de civilidade. É no confronto respeitoso de ideias que
                 se constrói conhecimento, se desenvolve empatia intelectual e se
                 fortalece a cultura argumentativa.
               </p>
@@ -33,7 +33,7 @@ export default function About() {
               <p className="text-lg text-domus-text-secondary leading-relaxed mb-6">
                 Nossa missão é promover a cultura do debate e da oratória,
                 formando debatedores que dominam a arte de comunicar, ouvir e
-                refutar — não apenas para vencer, mas para evoluir.
+                 refutar, sempre em busca de evolução.
               </p>
               <p className="text-lg text-domus-text-secondary leading-relaxed">
                 A DOMUS reúne estudantes, profissionais e entusiastas que
@@ -69,8 +69,8 @@ export default function About() {
                   Argumentação
                 </h3>
                 <p className="text-sm text-domus-text-secondary leading-relaxed">
-                  Argumentar não é gritar mais alto. É construir raciocínios
-                  sólidos, sustentados em evidências e lógica, capazes de
+                   Argumentar exige raciocínios sólidos, sustentados em evidências
+                   e lógica, capazes de
                   convencer pela razão.
                 </p>
               </div>

@@ -24,7 +24,7 @@ export default function Debates() {
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <SectionHeader
           title="Debater é pensar em voz alta"
-          subtitle="O debate não é apenas uma competição. É um exercício de escuta, argumentação e respeito à divergência."
+           subtitle="O debate combina escuta, argumentação e respeito à divergência em uma prática intelectual rigorosa."
         />
 
         {/* Editorial narrative */}
@@ -38,8 +38,8 @@ export default function Debates() {
               </p>
               <p className="text-domus-text-secondary leading-relaxed">
                 Promovemos debates que exigem preparação, raciocínio rápido
-                e capacidade de ouvir — não apenas de falar. Nosso objetivo
-                é formar debatedores completos.
+                 e capacidade genuína de ouvir. Nosso objetivo é formar
+                 debatedores completos.
               </p>
             </div>
             <div>

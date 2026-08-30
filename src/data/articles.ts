@@ -14,7 +14,7 @@ export const articles: Article[] = [
   {
     id: "1",
     title: "A arte de ouvir antes de responder",
-    excerpt: "Debater não é apenas falar. É construir Argumentação a partir da compreensão genuína do outro.",
+    excerpt: "Debater envolve construir argumentação a partir da compreensão genuína do outro.",
     category: "Debate",
     author: "[Autor Placeholder]",
     date: "2026-08-25",
