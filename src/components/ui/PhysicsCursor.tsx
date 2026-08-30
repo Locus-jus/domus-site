@@ -54,7 +54,7 @@ export default function PhysicsCursor() {
 
   return (
     <div ref={cursorRef} className="physics-cursor fixed left-0 top-0 z-[100] h-11 w-11 rounded-full border border-domus-primary/60 bg-domus-primary/10 pointer-events-none">
-      <div ref={innerRef} className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-domus-accent shadow-[0_0_14px_rgba(201,168,76,0.65)]" />
+      <div ref={innerRef} className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_14px_rgba(255,255,255,0.8)]" />
     </div>
   );
 }
