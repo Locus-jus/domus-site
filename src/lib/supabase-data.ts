@@ -78,10 +78,7 @@ export async function seedCloudInscriptions() {
 export async function insertCloudInscription(item: Inscription) {
   if (!supabase) return;
   const { error } = await supabase.from("inscriptions").upsert({ id: item.id, debate_id: item.debateId, name: item.name, email: item.email, society: item.society, institution: item.institution, category: item.category, phone: item.phone, status: item.status, created_at: item.createdAt });
-  if (!error) {
-    const { data: debate } = await supabase.from("debates").select("current_participants").eq("id", item.debateId).maybeSingle();
-    if (debate) await supabase.from("debates").update({ current_participants: Number(debate.current_participants || 0) + 1 }).eq("id", item.debateId);
-  }
+  // Participant totals are calculated from active records when debates are fetched.
 }
 
 export async function deleteCloudInscription(id: string) {
