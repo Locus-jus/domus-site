@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import AdminGate from "@/components/admin/AdminGate";
 import EventManager from "@/components/admin/EventManager";
 import JudgeManager from "@/components/admin/JudgeManager";
+import DebateManager from "@/components/admin/DebateManager";
 import { debates, formatLabels, participationLabels } from "@/data/debates";
 import { inscriptions, getStoredInscriptions, updateStoredInscription, deleteStoredInscription, type InscriptionStatus } from "@/data/inscriptions";
 import { judges } from "@/data/judges";
@@ -247,6 +248,8 @@ export default function AdminPage() {
           {/* Debates */}
           {activeTab === "debates" && (
             <div className="space-y-4">
+              <DebateManager />
+              <div className="hidden">
               {debates.map((debate) => (
                 <div
                   key={debate.id}
@@ -298,6 +301,7 @@ export default function AdminPage() {
                   </div>
                 </div>
               ))}
+              </div>
             </div>
           )}
 
