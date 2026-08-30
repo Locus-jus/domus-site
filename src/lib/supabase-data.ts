@@ -75,6 +75,10 @@ export async function insertCloudInscription(item: Inscription) {
   }
 }
 
+export async function deleteCloudInscription(id: string) {
+  if (supabase) await supabase.from("inscriptions").delete().eq("id", id);
+}
+
 export async function fetchCloudEvents(): Promise<ManagedEvent[] | null> {
   if (!supabase) return null;
   const { data, error } = await supabase.from("events").select("*").order("date");

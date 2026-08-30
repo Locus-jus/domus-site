@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { RefreshCw, Users } from "lucide-react";
 import { debates as defaultDebates } from "@/data/debates";
 import type { Inscription } from "@/data/inscriptions";
-import { fetchCloudDebates, fetchCloudInscriptions } from "@/lib/supabase-data";
+import { deleteStoredInscription } from "@/data/inscriptions";
+import { deleteCloudInscription, fetchCloudDebates, fetchCloudInscriptions } from "@/lib/supabase-data";
 
 export default function InscriptionManager() {
   const [items, setItems] = useState<Inscription[]>([]);
@@ -41,7 +42,7 @@ export default function InscriptionManager() {
       {groups.map(([debateId, registrations]) => (
         <section key={debateId} className="bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)] overflow-hidden">
           <div className="flex items-center gap-3 p-5 border-b border-domus-border-light"><Users className="w-5 h-5 text-domus-primary" /><div><h3 className="font-semibold text-domus-text">{titles[debateId] || `Debate ${debateId}`}</h3><p className="text-xs text-domus-text-muted">{registrations.length} inscrição(ões)</p></div></div>
-          <div className="overflow-x-auto"><table className="w-full text-left"><thead><tr className="border-b border-domus-border-light"><th className="p-4 text-xs uppercase text-domus-text-muted">Nome</th><th className="p-4 text-xs uppercase text-domus-text-muted">E-mail</th><th className="p-4 text-xs uppercase text-domus-text-muted">Sociedade</th><th className="p-4 text-xs uppercase text-domus-text-muted">Categoria</th><th className="p-4 text-xs uppercase text-domus-text-muted">Status</th></tr></thead><tbody>{registrations.map((item) => <tr key={item.id} className="border-b last:border-0 border-domus-border-light"><td className="p-4 text-sm text-domus-text">{item.name}</td><td className="p-4 text-sm text-domus-text-secondary">{item.email}</td><td className="p-4 text-sm text-domus-text-secondary">{item.society}</td><td className="p-4 text-sm text-domus-text-secondary">{item.category}</td><td className="p-4 text-sm text-domus-text-secondary">{item.status}</td></tr>)}</tbody></table></div>
+          <div className="overflow-x-auto"><table className="w-full text-left"><thead><tr className="border-b border-domus-border-light"><th className="p-4 text-xs uppercase text-domus-text-muted">Nome</th><th className="p-4 text-xs uppercase text-domus-text-muted">E-mail</th><th className="p-4 text-xs uppercase text-domus-text-muted">Sociedade</th><th className="p-4 text-xs uppercase text-domus-text-muted">Categoria</th><th className="p-4 text-xs uppercase text-domus-text-muted">Status</th><th className="p-4 text-xs uppercase text-domus-text-muted">Ação</th></tr></thead><tbody>{registrations.map((item) => <tr key={item.id} className="border-b last:border-0 border-domus-border-light"><td className="p-4 text-sm text-domus-text">{item.name}</td><td className="p-4 text-sm text-domus-text-secondary">{item.email}</td><td className="p-4 text-sm text-domus-text-secondary">{item.society}</td><td className="p-4 text-sm text-domus-text-secondary">{item.category}</td><td className="p-4 text-sm text-domus-text-secondary">{item.status}</td><td className="p-4"><button onClick={() => { setItems(deleteStoredInscription(item.id)); void deleteCloudInscription(item.id); }} className="text-sm text-red-500 hover:text-red-700">Remover</button></td></tr>)}</tbody></table></div>
         </section>
       ))}
     </div>
