@@ -6,28 +6,13 @@ export interface TimelineEvent {
 
 export const timeline: TimelineEvent[] = [
   {
-    year: "[Ano]",
+    year: "2019",
     title: "Fundação da DOMUS",
-    description: "A Sociedade de Debates e Oratória DOMUS é estabelecida com o objetivo de promover o debate e a oratória.",
+    description: "Fundação da Sociedade de Debates e Oratória DOMUS, criada para promover o debate, a oratória e o pensamento crítico.",
   },
   {
-    year: "[Ano]",
-    title: "Primeiro Debate Institucional",
-    description: "Realização do primeiro debate oficial, marcando o início das atividades regulares da sociedade.",
-  },
-  {
-    year: "[Ano]",
-    title: "Expansão da Comunidade",
-    description: "A DOMUS cresce e passa a reunir debatedores de diversas áreas do conhecimento.",
-  },
-  {
-    year: "[Ano]",
-    title: "Circuito de Competições",
-    description: "Inauguração do Circuito DOMUS, com torneios regulares e ranking de debatedores.",
-  },
-  {
-    year: "[Ano]",
-    title: "Programa de Formação",
-    description: "Criação do programa de formação em oratória e argumentação para novos membros.",
+    year: "2026",
+    title: "Torneio Interno 1/2026",
+    description: "Realização do Torneio Interno 1/2026, reunindo a comunidade DOMUS em uma atividade de debate e formação.",
   },
 ];
