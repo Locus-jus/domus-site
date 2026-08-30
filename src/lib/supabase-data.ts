@@ -64,8 +64,15 @@ export async function fetchCloudInscriptions(): Promise<Inscription[] | null> {
   const { data, error } = await supabase.from("inscriptions").select("*").order("created_at", { ascending: false });
   if (error) return null;
   const cloudItems = (data || []).map((row) => ({ id: String(row.id), debateId: String(row.debate_id), name: String(row.name), email: String(row.email), society: String(row.society), institution: String(row.institution || ""), category: String(row.category), phone: row.phone ? String(row.phone) : undefined, status: row.status as Inscription["status"], createdAt: String(row.created_at) }));
-  const cloudIds = new Set(cloudItems.map((item) => item.id));
-  return [...defaultInscriptions.filter((item) => !cloudIds.has(item.id)), ...cloudItems];
+  return cloudItems;
+}
+
+export async function seedCloudInscriptions() {
+  if (!supabase) return;
+  const { data } = await supabase.from("inscriptions").select("id");
+  const existing = new Set((data || []).map((item) => String(item.id)));
+  const missing = defaultInscriptions.filter((item) => !existing.has(item.id));
+  if (missing.length) await supabase.from("inscriptions").upsert(missing.map((item) => ({ id: item.id, debate_id: item.debateId, name: item.name, email: item.email, society: item.society, institution: item.institution, category: item.category, phone: item.phone, status: item.status, created_at: item.createdAt })));
 }
 
 export async function insertCloudInscription(item: Inscription) {
