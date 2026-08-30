@@ -64,7 +64,15 @@ export default function EventManager() {
     let active = true;
     setEvents(loadManagedEvents());
     try { setHiddenSystemEvents(JSON.parse(localStorage.getItem(HIDDEN_KEY) || "[]")); } catch { setHiddenSystemEvents([]); }
-    void fetchCloudEvents().then((cloud) => { if (active && cloud) setEvents(cloud); });
+    void fetchCloudEvents().then(async (cloud) => {
+      const local = loadManagedEvents();
+      if (cloud?.length === 0 && local.length > 0) {
+        await Promise.all(local.map((event) => upsertCloudEvent(event)));
+        if (active) setEvents(local);
+      } else if (active && cloud) {
+        setEvents(cloud);
+      }
+    });
     return () => { active = false; };
   }, []);
 
