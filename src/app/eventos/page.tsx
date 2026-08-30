@@ -8,18 +8,21 @@ import { debates, formatLabels } from "@/data/debates";
 import { events } from "@/data/events";
 import { loadManagedEvents, type ManagedEvent } from "@/components/admin/EventManager";
 import { fetchCloudEvents, fetchDeletedSystemEvents } from "@/lib/supabase-data";
+import { fetchCloudDebates } from "@/lib/supabase-data";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 
 export default function EventosPage() {
   const [tab, setTab] = useState<"proximos" | "realizados">("proximos");
   const [managedEvents, setManagedEvents] = useState<ManagedEvent[]>([]);
+  const [publicDebates, setPublicDebates] = useState(debates);
   const [hiddenSystemEvents, setHiddenSystemEvents] = useState<string[]>([]);
 
   useEffect(() => {
     setManagedEvents(loadManagedEvents());
     try { setHiddenSystemEvents(JSON.parse(localStorage.getItem("domus_hidden_system_events") || "[]")); } catch { setHiddenSystemEvents([]); }
     void fetchCloudEvents().then((cloud) => { if (cloud) setManagedEvents(cloud); });
+    void fetchCloudDebates().then((cloud) => { if (cloud) setPublicDebates(cloud); });
     void fetchDeletedSystemEvents().then((deleted) => { if (deleted.length) setHiddenSystemEvents((current) => [...new Set([...current, ...deleted])]); });
     const refresh = () => setManagedEvents(loadManagedEvents());
     window.addEventListener("storage", refresh);
@@ -28,8 +31,8 @@ export default function EventosPage() {
     return () => { window.removeEventListener("storage", refresh); window.removeEventListener("domus:events-changed", onEventsChanged); };
   }, []);
 
-  const upcomingDebates = debates.filter((d) => d.status === "upcoming");
-  const pastDebates = debates.filter((d) => d.status === "past");
+  const upcomingDebates = publicDebates.filter((d) => d.status === "upcoming");
+  const pastDebates = publicDebates.filter((d) => d.status === "past");
   const visibleEvents = events.filter((e) => !hiddenSystemEvents.includes(e.id));
   const upcomingEvents = visibleEvents.filter((e) => e.status !== "closed");
   const pastEvents = visibleEvents.filter((e) => e.status === "closed");
