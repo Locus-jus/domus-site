@@ -47,11 +47,14 @@ export default function AdminPage() {
   const [adminInscriptions, setAdminInscriptions] = useState(inscriptions);
 
   useEffect(() => {
-    const refresh = () => setAdminInscriptions(getStoredInscriptions());
+    const refresh = () => {
+      setAdminInscriptions(getStoredInscriptions());
+      void fetchCloudInscriptions().then((cloud) => { if (cloud) setAdminInscriptions(cloud); });
+    };
     refresh();
-    void fetchCloudInscriptions().then((cloud) => { if (cloud) setAdminInscriptions(cloud); });
+    const interval = window.setInterval(refresh, 10000);
     window.addEventListener("storage", refresh);
-    return () => window.removeEventListener("storage", refresh);
+    return () => { window.clearInterval(interval); window.removeEventListener("storage", refresh); };
   }, []);
 
   const tabs = [

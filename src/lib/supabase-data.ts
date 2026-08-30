@@ -34,7 +34,14 @@ function fromRow(row: Record<string, unknown>): Debate {
 export async function fetchCloudDebates(): Promise<Debate[] | null> {
   if (!supabase) return null;
   const { data, error } = await supabase.from("debates").select("*").order("number");
-  return error ? null : (data || []).map((row) => fromRow(row));
+  if (error) return null;
+  const { data: cloudInscriptions } = await supabase.from("inscriptions").select("id, debate_id, status");
+  const originalIds = new Set(["1", "2", "3"]);
+  return (data || []).map((row) => {
+    const debate = fromRow(row);
+    const newCount = (cloudInscriptions || []).filter((item) => item.debate_id === debate.id && !originalIds.has(String(item.id)) && item.status !== "cancelada").length;
+    return { ...debate, currentParticipants: (debate.currentParticipants || 0) + newCount };
+  });
 }
 
 export async function upsertCloudDebate(debate: Debate) {
