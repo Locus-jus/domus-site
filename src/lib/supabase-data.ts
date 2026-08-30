@@ -2,7 +2,7 @@
 
 import { supabase } from "@/lib/supabase";
 import { debates as defaultDebates, type Debate } from "@/data/debates";
-import type { Inscription } from "@/data/inscriptions";
+import { inscriptions as defaultInscriptions, type Inscription } from "@/data/inscriptions";
 import type { ManagedEvent } from "@/components/admin/EventManager";
 import type { Judge } from "@/data/judges";
 
@@ -63,7 +63,9 @@ export async function fetchCloudInscriptions(): Promise<Inscription[] | null> {
   if (!supabase) return null;
   const { data, error } = await supabase.from("inscriptions").select("*").order("created_at", { ascending: false });
   if (error) return null;
-  return (data || []).map((row) => ({ id: String(row.id), debateId: String(row.debate_id), name: String(row.name), email: String(row.email), society: String(row.society), institution: String(row.institution || ""), category: String(row.category), phone: row.phone ? String(row.phone) : undefined, status: row.status as Inscription["status"], createdAt: String(row.created_at) }));
+  const cloudItems = (data || []).map((row) => ({ id: String(row.id), debateId: String(row.debate_id), name: String(row.name), email: String(row.email), society: String(row.society), institution: String(row.institution || ""), category: String(row.category), phone: row.phone ? String(row.phone) : undefined, status: row.status as Inscription["status"], createdAt: String(row.created_at) }));
+  const cloudIds = new Set(cloudItems.map((item) => item.id));
+  return [...defaultInscriptions.filter((item) => !cloudIds.has(item.id)), ...cloudItems];
 }
 
 export async function insertCloudInscription(item: Inscription) {
