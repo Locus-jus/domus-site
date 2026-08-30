@@ -3,6 +3,8 @@
 import { supabase } from "@/lib/supabase";
 import { debates as defaultDebates, type Debate } from "@/data/debates";
 import type { Inscription } from "@/data/inscriptions";
+import type { ManagedEvent } from "@/components/admin/EventManager";
+import type { Judge } from "@/data/judges";
 
 function toRow(debate: Debate) {
   return {
@@ -64,4 +66,34 @@ export async function insertCloudInscription(item: Inscription) {
     const { data: debate } = await supabase.from("debates").select("current_participants").eq("id", item.debateId).maybeSingle();
     if (debate) await supabase.from("debates").update({ current_participants: Number(debate.current_participants || 0) + 1 }).eq("id", item.debateId);
   }
+}
+
+export async function fetchCloudEvents(): Promise<ManagedEvent[] | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.from("events").select("*").order("date");
+  if (error) return null;
+  return (data || []).map((row) => ({ id: String(row.id), name: String(row.name), description: String(row.description || ""), date: String(row.date), time: String(row.time), location: String(row.location), type: String(row.type), format: row.format as ManagedEvent["format"], participation: row.participation as ManagedEvent["participation"], status: row.status as ManagedEvent["status"], inscriptionsOpen: Boolean(row.inscriptions_open), maxParticipants: row.max_participants ? Number(row.max_participants) : undefined, currentParticipants: Number(row.current_participants || 0), editalUrl: row.edital_url ? String(row.edital_url) : undefined }));
+}
+
+export async function upsertCloudEvent(event: ManagedEvent) {
+  if (supabase) await supabase.from("events").upsert({ id: event.id, name: event.name, description: event.description, date: event.date, time: event.time, location: event.location, type: event.type, format: event.format, participation: event.participation, status: event.status, inscriptions_open: event.inscriptionsOpen, max_participants: event.maxParticipants, current_participants: event.currentParticipants, edital_url: event.editalUrl });
+}
+
+export async function deleteCloudEvent(id: string) {
+  if (supabase) await supabase.from("events").delete().eq("id", id);
+}
+
+export async function fetchCloudJudges(): Promise<Judge[] | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.from("judges").select("*").order("name");
+  if (error) return null;
+  return (data || []).map((row) => ({ id: String(row.id), name: String(row.name), email: String(row.email), society: String(row.society), experience: String(row.experience || ""), notes: row.notes ? String(row.notes) : undefined, assignedDebates: Array.isArray(row.assigned_debates) ? row.assigned_debates.map(String) : [] }));
+}
+
+export async function upsertCloudJudge(judge: Judge) {
+  if (supabase) await supabase.from("judges").upsert({ id: judge.id, name: judge.name, email: judge.email, society: judge.society, experience: judge.experience, notes: judge.notes, assigned_debates: judge.assignedDebates });
+}
+
+export async function deleteCloudJudge(id: string) {
+  if (supabase) await supabase.from("judges").delete().eq("id", id);
 }

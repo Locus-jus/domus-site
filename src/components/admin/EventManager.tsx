@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Plus, Pencil, Trash2, X, Check, Calendar, Clock, MapPin } from "lucide-react";
 import { formatLabels, participationLabels, type DebateFormat, type DebateParticipation } from "@/data/debates";
+import { deleteCloudEvent, fetchCloudEvents, upsertCloudEvent } from "@/lib/supabase-data";
 
 export interface ManagedEvent {
   id: string;
@@ -57,7 +58,10 @@ export default function EventManager() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
+    let active = true;
     setEvents(loadManagedEvents());
+    void fetchCloudEvents().then((cloud) => { if (active && cloud) setEvents(cloud); });
+    return () => { active = false; };
   }, []);
 
   const handleChange = (
@@ -107,6 +111,8 @@ export default function EventManager() {
 
     setEvents(updated);
     saveEvents(updated);
+    const saved = updated.find((event) => event.id === (editingId || updated[updated.length - 1].id));
+    if (saved) void upsertCloudEvent(saved);
     setShowForm(false);
     setEditingId(null);
     setFormData(defaultEvent);
@@ -134,6 +140,7 @@ export default function EventManager() {
     const updated = events.filter((ev) => ev.id !== id);
     setEvents(updated);
     saveEvents(updated);
+    void deleteCloudEvent(id);
     setDeleteConfirm(null);
   };
 

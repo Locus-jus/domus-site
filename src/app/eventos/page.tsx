@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import { debates, formatLabels } from "@/data/debates";
 import { events } from "@/data/events";
 import { loadManagedEvents, type ManagedEvent } from "@/components/admin/EventManager";
+import { fetchCloudEvents } from "@/lib/supabase-data";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 
@@ -16,6 +17,7 @@ export default function EventosPage() {
 
   useEffect(() => {
     setManagedEvents(loadManagedEvents());
+    void fetchCloudEvents().then((cloud) => { if (cloud) setManagedEvents(cloud); });
     const refresh = () => setManagedEvents(loadManagedEvents());
     window.addEventListener("storage", refresh);
     return () => window.removeEventListener("storage", refresh);

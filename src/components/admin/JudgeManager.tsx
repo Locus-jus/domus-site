@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
 import { judges as defaultJudges, type Judge } from "@/data/judges";
+import { deleteCloudJudge, fetchCloudJudges, upsertCloudJudge } from "@/lib/supabase-data";
 
 const STORAGE_KEY = "domus_managed_judges";
 const emptyJudge: Omit<Judge, "id"> = {
@@ -29,7 +30,7 @@ export default function JudgeManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => setItems(loadJudges()), []);
+  useEffect(() => { let active = true; setItems(loadJudges()); void fetchCloudJudges().then((cloud) => { if (active && cloud) setItems(cloud); }); return () => { active = false; }; }, []);
 
   const persist = (next: Judge[]) => {
     setItems(next);
@@ -42,6 +43,8 @@ export default function JudgeManager() {
       ? items.map((item) => item.id === editingId ? { ...item, ...form } : item)
       : [...items, { ...form, id: `judge_${Date.now()}` }];
     persist(next);
+    const saved = next.find((item) => item.id === (editingId || next[next.length - 1].id));
+    if (saved) void upsertCloudJudge(saved);
     setForm(emptyJudge);
     setEditingId(null);
     setOpen(false);
@@ -76,7 +79,7 @@ export default function JudgeManager() {
         {items.map((judge) => (
           <div key={judge.id} className="flex items-center justify-between gap-4 p-5 bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)]">
             <div><p className="font-medium text-domus-text">{judge.name}</p><p className="text-sm text-domus-text-muted">{judge.email} · {judge.society}</p><p className="text-sm text-domus-text-secondary mt-1">{judge.experience}</p></div>
-            <div className="flex gap-2"><button onClick={() => edit(judge)} aria-label="Editar jurado" className="p-2 text-domus-text-muted hover:text-domus-primary"><Pencil className="w-4 h-4" /></button><button onClick={() => persist(items.filter((item) => item.id !== judge.id))} aria-label="Excluir jurado" className="p-2 text-domus-text-muted hover:text-red-500"><Trash2 className="w-4 h-4" /></button></div>
+            <div className="flex gap-2"><button onClick={() => edit(judge)} aria-label="Editar jurado" className="p-2 text-domus-text-muted hover:text-domus-primary"><Pencil className="w-4 h-4" /></button><button onClick={() => { persist(items.filter((item) => item.id !== judge.id)); void deleteCloudJudge(judge.id); }} aria-label="Excluir jurado" className="p-2 text-domus-text-muted hover:text-red-500"><Trash2 className="w-4 h-4" /></button></div>
           </div>
         ))}
       </div>
