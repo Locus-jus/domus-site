@@ -36,14 +36,18 @@ export default function DebatePage({
   const [participantCount, setParticipantCount] = useState(0);
 
   useEffect(() => {
-    setDebate(getManagedDebates().find((item) => item.slug === slug));
-    const current = getManagedDebates().find((item) => item.slug === slug);
-    setParticipantCount(current ? getInscriptionCount(current.id, current.currentParticipants) : 0);
-    setLoaded(true);
+    let active = true;
+    setLoaded(false);
+    const local = getManagedDebates().find((item) => item.slug === slug);
+    setDebate(local);
     void fetchCloudDebates().then((cloud) => {
-      const current = cloud?.find((item) => item.slug === slug);
-      if (current) { setDebate(current); setParticipantCount(current.currentParticipants || 0); }
+      if (!active) return;
+      const current = cloud?.find((item) => item.slug === slug) || local;
+      setDebate(current);
+      setParticipantCount(current ? getInscriptionCount(current.id, current.currentParticipants) : 0);
+      setLoaded(true);
     });
+    return () => { active = false; };
   }, [slug]);
 
   useEffect(() => {
