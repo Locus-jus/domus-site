@@ -1,0 +1,128 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
+import Button from "@/components/ui/Button";
+
+const navLinks = [
+  { href: "#sobre", label: "Sobre" },
+  { href: "#debates", label: "Debates" },
+  { href: "#eventos", label: "Eventos" },
+  { href: "#competidores", label: "Competidores" },
+  { href: "#ideias", label: "Ideias" },
+];
+
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  return (
+    <>
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          scrolled
+            ? "bg-domus-surface/95 backdrop-blur-md border-b border-domus-border-light shadow-[var(--shadow-sm)]"
+            : "bg-transparent"
+        )}
+      >
+        <nav className="max-w-7xl mx-auto px-6 md:px-8 flex items-center justify-between h-16 md:h-20">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 group" aria-label="DOMUS - Página inicial">
+            <div className="w-9 h-9 md:w-10 md:h-10 bg-domus-primary rounded-[var(--radius-sm)] flex items-center justify-center">
+              <span className="font-[family-name:var(--font-playfair)] text-white text-lg md:text-xl font-bold">
+                D
+              </span>
+            </div>
+            <div className="hidden sm:block">
+              <span className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text group-hover:text-domus-primary transition-colors">
+                DOMUS
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-domus-text-secondary hover:text-domus-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-domus-primary after:transition-all hover:after:w-full"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Desktop CTA */}
+          <div className="hidden md:block">
+            <Button variant="primary" size="sm">
+              Faça parte
+            </Button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 text-domus-text"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      <div
+        className={cn(
+          "fixed inset-0 z-40 bg-domus-surface transition-all duration-300 md:hidden",
+          mobileOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
+        <div className="flex flex-col items-center justify-center h-full gap-8">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-domus-text hover:text-domus-primary transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => setMobileOpen(false)}
+          >
+            Faça parte
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+}
