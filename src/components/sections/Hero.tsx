@@ -1,11 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Button from "@/components/ui/Button";
+import { getUpcomingDebates } from "@/data/debates";
 
 export default function Hero() {
+  const upcoming = getUpcomingDebates();
+  const nextDebate = upcoming[0];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -76,7 +81,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
           className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl lg:text-3xl text-gray-300 italic mb-4"
         >
-          Onde ideias encontram argumentos.
+          Ideias encontram argumentos.
         </motion.p>
 
         <motion.p
@@ -96,12 +101,16 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Button variant="primary" size="lg">
-            Conheça a DOMUS
-          </Button>
-          <Button variant="outline" size="lg" className="border-gray-600 text-gray-300 hover:bg-white/10 hover:border-white/30 hover:text-white">
-            Participe da Sociedade
-          </Button>
+          <Link href="/#sobre">
+            <Button variant="primary" size="lg">
+              Conheça a DOMUS
+            </Button>
+          </Link>
+          <Link href="/#debates">
+            <Button variant="outline" size="lg" className="border-gray-600 text-gray-300 hover:bg-white/10 hover:border-white/30 hover:text-white">
+              Próximos debates
+            </Button>
+          </Link>
         </motion.div>
       </div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight, Users } from "lucide-react";
 
@@ -98,10 +99,10 @@ export default function EventCard({
         </div>
 
         {status === "open" && (
-          <button className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary hover:text-domus-primary-dark transition-colors group/btn">
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary group-hover:text-domus-primary-dark transition-colors">
             Inscreva-se
-            <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-          </button>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </span>
         )}
         {status === "soon" && (
           <span className="inline-block text-sm text-domus-text-muted italic">

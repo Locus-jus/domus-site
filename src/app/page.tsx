@@ -6,7 +6,6 @@ import WhatWeDo from "@/components/sections/WhatWeDo";
 import WhyDomus from "@/components/sections/WhyDomus";
 import Debates from "@/components/sections/Debates";
 import Events from "@/components/sections/Events";
-import Ranking from "@/components/sections/Ranking";
 import Debaters from "@/components/sections/Debaters";
 import Articles from "@/components/sections/Articles";
 import History from "@/components/sections/History";
@@ -19,11 +18,10 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <About />
+        <Debates />
         <WhatWeDo />
         <WhyDomus />
-        <Debates />
         <Events />
-        <Ranking />
         <Debaters />
         <Articles />
         <History />

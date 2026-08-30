@@ -31,11 +31,12 @@ function LinkedinIcon({ className }: { className?: string }) {
 
 const footerLinks = {
   navegacao: [
-    { href: "#sobre", label: "Sobre" },
-    { href: "#debates", label: "Debates" },
-    { href: "#eventos", label: "Eventos" },
-    { href: "#competidores", label: "Competidores" },
-    { href: "#ideias", label: "Ideias" },
+    { href: "/#sobre", label: "A Sociedade" },
+    { href: "/#debates", label: "Debates" },
+    { href: "/agenda", label: "Eventos" },
+    { href: "/membros", label: "Membros" },
+    { href: "/#ideias", label: "Ideias" },
+    { href: "/#contato", label: "Contato" },
   ],
   social: [
     { href: "#", label: "Instagram", icon: InstagramIcon },
@@ -78,12 +79,12 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.navegacao.map((link) => (
                 <li key={link.href}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-gray-400 hover:text-white transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -110,12 +111,12 @@ export default function Footer() {
               })}
             </div>
             <div className="mt-6">
-              <a
-                href="#contato"
+              <Link
+                href="/#contato"
                 className="text-sm font-semibold text-domus-primary hover:text-domus-primary-light transition-colors"
               >
                 Entre em contato
-              </a>
+              </Link>
             </div>
           </div>
         </div>

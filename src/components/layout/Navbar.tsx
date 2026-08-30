@@ -7,11 +7,11 @@ import { Menu, X } from "lucide-react";
 import Button from "@/components/ui/Button";
 
 const navLinks = [
-  { href: "#sobre", label: "Sobre" },
-  { href: "#debates", label: "Debates" },
-  { href: "#eventos", label: "Eventos" },
-  { href: "#competidores", label: "Competidores" },
-  { href: "#ideias", label: "Ideias" },
+  { href: "/#sobre", label: "A Sociedade" },
+  { href: "/#debates", label: "Debates" },
+  { href: "/agenda", label: "Eventos" },
+  { href: "/membros", label: "Membros" },
+  { href: "/#ideias", label: "Ideias" },
 ];
 
 export default function Navbar() {
@@ -65,21 +65,23 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 className="text-sm font-medium text-domus-text-secondary hover:text-domus-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-domus-primary after:transition-all hover:after:w-full"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:block">
-            <Button variant="primary" size="sm">
-              Faça parte
-            </Button>
+            <Link href="/#contato">
+              <Button variant="primary" size="sm">
+                Participe
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -105,22 +107,20 @@ export default function Navbar() {
       >
         <div className="flex flex-col items-center justify-center h-full gap-8">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               onClick={() => setMobileOpen(false)}
               className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-domus-text hover:text-domus-primary transition-colors"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => setMobileOpen(false)}
-          >
-            Faça parte
-          </Button>
+          <Link href="/#contato" onClick={() => setMobileOpen(false)}>
+            <Button variant="primary" size="lg">
+              Participe
+            </Button>
+          </Link>
         </div>
       </div>
     </>
