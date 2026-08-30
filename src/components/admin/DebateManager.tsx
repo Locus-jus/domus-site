@@ -9,7 +9,7 @@ const STORAGE_KEY = "domus_managed_debates";
 type DebateForm = Omit<Debate, "id" | "number" | "currentParticipants" | "participants" | "result">;
 const emptyForm: DebateForm = {
   slug: "", title: "", subtitle: "", theme: "", description: "", date: "", time: "", location: "",
-  format: "simples", participation: "interno", status: "upcoming", inscriptionsOpen: false,
+  format: "simples", participation: "interno", status: "upcoming", inscriptionsOpen: false, isPaid: false,
   maxParticipants: 30, category: "Institucional", rules: "", edital: "", tabbycatUrl: "",
 };
 
@@ -114,6 +114,7 @@ export default function DebateManager() {
           <textarea required value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Descrição *" className="md:col-span-2 px-4 py-3 rounded border border-domus-border bg-domus-background text-sm" rows={3} />
           <textarea value={form.rules} onChange={(e) => setForm({ ...form, rules: e.target.value })} placeholder="Regras" className="md:col-span-2 px-4 py-3 rounded border border-domus-border bg-domus-background text-sm" rows={3} />
           <label className="flex items-center gap-2 text-sm text-domus-text"><input type="checkbox" checked={form.inscriptionsOpen} onChange={(e) => setForm({ ...form, inscriptionsOpen: e.target.checked })} /> Inscrições abertas</label>
+          <label className="flex items-center gap-2 text-sm text-domus-text"><input type="checkbox" checked={form.isPaid} onChange={(e) => setForm({ ...form, isPaid: e.target.checked })} /> Debate pago</label>
           <div className="flex gap-3 md:col-span-2"><button type="submit" className="inline-flex items-center gap-2 px-5 py-2.5 bg-domus-primary text-white rounded text-sm"><Check className="w-4 h-4" /> Salvar</button><button type="button" onClick={() => setOpen(false)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-domus-border rounded text-sm"><X className="w-4 h-4" /> Cancelar</button></div>
         </form>
       )}

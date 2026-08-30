@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/#sobre", label: "A DOMUS" },
   { href: "/#debates", label: "Debates" },
   { href: "/eventos", label: "Eventos" },
+  { href: "/pagamentos", label: "Pagamentos" },
   { href: "/#ideias", label: "Ideias" },
   { href: "/contato", label: "Contato" },
   { href: "/login", label: "Entrar" },

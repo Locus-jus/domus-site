@@ -196,6 +196,14 @@ export default function DebatePage({
                   </div>
                 )}
 
+                {debate.isPaid && (
+                  <div className="p-6 rounded-[var(--radius-lg)] border border-domus-accent/30 bg-domus-accent/5">
+                    <div className="flex items-center gap-3 mb-3"><CreditCard className="w-5 h-5 text-domus-accent" /><h3 className="font-semibold text-domus-text">Pagamento</h3></div>
+                    <p className="text-sm text-domus-text-secondary">Após enviar sua inscrição, a DOMUS confirmará os dados para pagamento por e-mail.</p>
+                    <Link href="/pagamentos" className="inline-block mt-3 text-sm text-domus-primary hover:underline">Ver área de pagamentos</Link>
+                  </div>
+                )}
+
                 {/* Edital */}
                 {debate.edital && (
                   <div className="p-6 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface">

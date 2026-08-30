@@ -44,6 +44,7 @@ export interface Debate {
   result?: string;
   edital?: string;
   pricing?: DebatePricing;
+  isPaid: boolean;
   tabbycatUrl?: string;
 }
 
@@ -77,6 +78,7 @@ export const debates: Debate[] = [
       currency: "BRL",
       description: "Membros DOMUS: gratuita. Demais: R$ 25 (estudante) / R$ 40 (não-estudante).",
     },
+    isPaid: true,
     tabbycatUrl: "https://tabbycat.example.com/tournament/domus-open-2026/",
   },
   {
@@ -104,6 +106,7 @@ export const debates: Debate[] = [
       currency: "BRL",
       description: "Apenas membros DOMUS. Participação gratuita.",
     },
+    isPaid: false,
   },
   {
     id: "3",
@@ -131,6 +134,7 @@ export const debates: Debate[] = [
       currency: "BRL",
       description: "Membros DOMUS: gratuita. Outras sociedades: R$ 15. Independentes: R$ 20.",
     },
+    isPaid: true,
   },
   {
     id: "4",
@@ -157,6 +161,7 @@ export const debates: Debate[] = [
       currency: "BRL",
       description: "Apenas membros DOMUS. Participação gratuita.",
     },
+    isPaid: false,
   },
 ];
 

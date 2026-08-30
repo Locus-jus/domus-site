@@ -14,7 +14,7 @@ function toRow(debate: Debate) {
     participation: debate.participation, status: debate.status,
     inscriptions_open: debate.inscriptionsOpen, max_participants: debate.maxParticipants,
     current_participants: debate.currentParticipants || 0, category: debate.category,
-    rules: debate.rules, edital: debate.edital, tabbycat_url: debate.tabbycatUrl,
+    rules: debate.rules, edital: debate.edital, is_paid: debate.isPaid, tabbycat_url: debate.tabbycatUrl,
   };
 }
 
@@ -26,7 +26,7 @@ function fromRow(row: Record<string, unknown>): Debate {
     participation: row.participation as Debate["participation"], status: row.status as Debate["status"],
     inscriptionsOpen: Boolean(row.inscriptions_open), maxParticipants: row.max_participants ? Number(row.max_participants) : undefined,
     currentParticipants: Number(row.current_participants || 0), category: String(row.category),
-    rules: row.rules ? String(row.rules) : undefined, edital: row.edital ? String(row.edital) : undefined,
+    rules: row.rules ? String(row.rules) : undefined, edital: row.edital ? String(row.edital) : undefined, isPaid: Boolean(row.is_paid),
     tabbycatUrl: row.tabbycat_url ? String(row.tabbycat_url) : undefined,
   };
 }

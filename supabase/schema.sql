@@ -16,6 +16,7 @@ create table if not exists public.debates (
   max_participants integer,
   current_participants integer not null default 0,
   category text not null,
+  is_paid boolean not null default false,
   rules text,
   edital text,
   tabbycat_url text,
