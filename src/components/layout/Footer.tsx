@@ -52,7 +52,7 @@ export default function Footer() {
           <div className="md:col-span-5">
             <Link href="/" className="inline-flex items-center gap-3 mb-4">
               <Image
-                src="/domus-logo.svg"
+                src="/file_0000000009a0820eaf8042a865e67d68.png"
                 alt="DOMUS"
                 width={40}
                 height={40}

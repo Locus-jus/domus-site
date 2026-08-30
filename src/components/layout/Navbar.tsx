@@ -54,7 +54,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group" aria-label="DOMUS - Página inicial">
             <Image
-              src="/domus-logo.svg"
+              src="/file_0000000009a0820eaf8042a865e67d68.png"
               alt="DOMUS"
               width={40}
               height={40}

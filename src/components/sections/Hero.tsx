@@ -39,7 +39,7 @@ export default function Hero() {
           className="mb-8"
         >
           <Image
-            src="/domus-logo.svg"
+            src="/file_0000000009a0820eaf8042a865e67d68.png"
             alt="DOMUS"
             width={120}
             height={120}
