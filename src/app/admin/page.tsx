@@ -7,6 +7,7 @@ import AdminGate from "@/components/admin/AdminGate";
 import EventManager from "@/components/admin/EventManager";
 import JudgeManager from "@/components/admin/JudgeManager";
 import DebateManager from "@/components/admin/DebateManager";
+import { fetchCloudInscriptions } from "@/lib/supabase-data";
 import { debates, formatLabels, participationLabels } from "@/data/debates";
 import { inscriptions, getStoredInscriptions, updateStoredInscription, deleteStoredInscription, type InscriptionStatus } from "@/data/inscriptions";
 import { judges } from "@/data/judges";
@@ -48,6 +49,7 @@ export default function AdminPage() {
   useEffect(() => {
     const refresh = () => setAdminInscriptions(getStoredInscriptions());
     refresh();
+    void fetchCloudInscriptions().then((cloud) => { if (cloud) setAdminInscriptions(cloud); });
     window.addEventListener("storage", refresh);
     return () => window.removeEventListener("storage", refresh);
   }, []);

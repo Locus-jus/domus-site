@@ -7,6 +7,7 @@ import { getDebateBySlug, formatLabels, participationLabels } from "@/data/debat
 import { getJudgesForDebate } from "@/data/judges";
 import { getManagedDebates } from "@/components/admin/DebateManager";
 import { getInscriptionCount } from "@/data/inscriptions";
+import { fetchCloudDebates } from "@/lib/supabase-data";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import InscriptionForm from "@/components/forms/InscriptionForm";
@@ -39,6 +40,10 @@ export default function DebatePage({
     const current = getManagedDebates().find((item) => item.slug === slug);
     setParticipantCount(current ? getInscriptionCount(current.id, current.currentParticipants) : 0);
     setLoaded(true);
+    void fetchCloudDebates().then((cloud) => {
+      const current = cloud?.find((item) => item.slug === slug);
+      if (current) { setDebate(current); setParticipantCount(current.currentParticipants || 0); }
+    });
   }, [slug]);
 
   useEffect(() => {

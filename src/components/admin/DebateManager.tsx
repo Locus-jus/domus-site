@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Check, Pencil, Plus, Trash2, X } from "lucide-react";
 import { debates as defaultDebates, formatLabels, participationLabels, type Debate, type DebateFormat, type DebateParticipation } from "@/data/debates";
+import { deleteCloudDebate, fetchCloudDebates, seedCloudDebates, upsertCloudDebate } from "@/lib/supabase-data";
 
 const STORAGE_KEY = "domus_managed_debates";
 type DebateForm = Omit<Debate, "id" | "number" | "currentParticipants" | "participants" | "result">;
@@ -32,7 +33,12 @@ export default function DebateManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => setItems(loadDebates()), []);
+  useEffect(() => {
+    let active = true;
+    setItems(loadDebates());
+    seedCloudDebates().then(() => fetchCloudDebates().then((cloud) => { if (active && cloud) setItems(cloud); }));
+    return () => { active = false; };
+  }, []);
 
   const persist = (next: Debate[]) => {
     setItems(next);
@@ -53,6 +59,8 @@ export default function DebateManager() {
       ? items.map((item) => item.id === editingId ? { ...item, ...form } : item)
       : [...items, { ...form, id: `debate_${Date.now()}`, number: items.length + 1, currentParticipants: 0 }];
     persist(next);
+    const saved = next.find((item) => item.id === (editingId || next[next.length - 1].id));
+    if (saved) void upsertCloudDebate(saved);
     setForm(emptyForm);
     setEditingId(null);
     setOpen(false);
@@ -110,7 +118,7 @@ export default function DebateManager() {
         </form>
       )}
       <div className="space-y-3">
-        {items.map((item) => <div key={item.id} className="flex items-center justify-between gap-4 p-5 bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)]"><div><p className="font-medium text-domus-text">{item.title}</p><p className="text-sm text-domus-text-muted">{item.date} · {item.time} · {item.inscriptionsOpen ? "Inscrições abertas" : "Inscrições fechadas"}</p></div><div className="flex gap-2"><button onClick={() => edit(item)} aria-label="Editar debate" className="p-2 text-domus-text-muted hover:text-domus-primary"><Pencil className="w-4 h-4" /></button><button onClick={() => persist(items.filter((current) => current.id !== item.id))} aria-label="Excluir debate" className="p-2 text-domus-text-muted hover:text-red-500"><Trash2 className="w-4 h-4" /></button></div></div>)}
+        {items.map((item) => <div key={item.id} className="flex items-center justify-between gap-4 p-5 bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)]"><div><p className="font-medium text-domus-text">{item.title}</p><p className="text-sm text-domus-text-muted">{item.date} · {item.time} · {item.inscriptionsOpen ? "Inscrições abertas" : "Inscrições fechadas"}</p></div><div className="flex gap-2"><button onClick={() => edit(item)} aria-label="Editar debate" className="p-2 text-domus-text-muted hover:text-domus-primary"><Pencil className="w-4 h-4" /></button><button onClick={() => { persist(items.filter((current) => current.id !== item.id)); void deleteCloudDebate(item.id); }} aria-label="Excluir debate" className="p-2 text-domus-text-muted hover:text-red-500"><Trash2 className="w-4 h-4" /></button></div></div>)}
       </div>
     </div>
   );

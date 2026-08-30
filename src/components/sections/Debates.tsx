@@ -6,6 +6,7 @@ import DebateCard from "@/components/cards/DebateCard";
 import { getUpcomingDebates } from "@/data/debates";
 import { getManagedDebates } from "@/components/admin/DebateManager";
 import { useEffect, useState } from "react";
+import { fetchCloudDebates } from "@/lib/supabase-data";
 
 export default function Debates() {
   const [upcoming, setUpcoming] = useState(getUpcomingDebates);
@@ -13,6 +14,7 @@ export default function Debates() {
   useEffect(() => {
     const refresh = () => setUpcoming(getManagedDebates().filter((debate) => debate.status === "upcoming"));
     refresh();
+    void fetchCloudDebates().then((cloud) => { if (cloud) setUpcoming(cloud.filter((debate) => debate.status === "upcoming")); });
     window.addEventListener("storage", refresh);
     return () => window.removeEventListener("storage", refresh);
   }, []);
