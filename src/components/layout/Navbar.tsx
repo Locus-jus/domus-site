@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 const navLinks = [
   { href: "/#sobre", label: "A DOMUS" },
@@ -18,6 +19,7 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, logout, isLoading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,8 +81,32 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop Admin link */}
-          <div className="hidden md:block">
+          {/* Desktop User / Admin links */}
+          <div className="hidden md:flex items-center gap-4">
+            {!isLoading && user ? (
+              <>
+                <Link
+                  href="/perfil"
+                  className="flex items-center gap-2 text-sm text-domus-text-secondary hover:text-domus-primary transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="max-w-[100px] truncate">{user.name}</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="text-xs text-domus-text-muted hover:text-domus-primary transition-colors"
+                >
+                  Sair
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="text-sm font-medium text-domus-text-secondary hover:text-domus-primary transition-colors"
+              >
+                Entrar
+              </Link>
+            )}
             <Link
               href="/admin"
               className="text-xs text-domus-text-muted hover:text-domus-primary transition-colors"
@@ -128,6 +154,34 @@ export default function Navbar() {
           >
             Área administrativa
           </Link>
+          {!isLoading && user ? (
+            <>
+              <Link
+                href="/perfil"
+                onClick={() => setMobileOpen(false)}
+                className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-domus-text hover:text-domus-primary transition-colors"
+              >
+                Meu perfil
+              </Link>
+              <button
+                onClick={() => {
+                  logout();
+                  setMobileOpen(false);
+                }}
+                className="text-sm text-domus-text-muted hover:text-domus-primary transition-colors"
+              >
+                Sair da conta
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setMobileOpen(false)}
+              className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-domus-text hover:text-domus-primary transition-colors"
+            >
+              Entrar
+            </Link>
+          )}
         </div>
       </div>
     </>

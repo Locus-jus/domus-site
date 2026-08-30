@@ -3,28 +3,33 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, Shield } from "lucide-react";
+import { useAuth } from "@/lib/auth";
+import type { DebatePricing } from "@/data/debates";
 
 interface InscriptionFormProps {
   debateId: string;
   debateTitle: string;
+  pricing?: DebatePricing;
   className?: string;
 }
 
 export default function InscriptionForm({
   debateId,
   debateTitle,
+  pricing,
   className,
 }: InscriptionFormProps) {
+  const { user, isDomusMember } = useAuth();
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: user?.name || "",
+    email: user?.email || "",
     society: "DOMUS",
     customSociety: "",
-    institution: "",
+    institution: user?.institution || "",
     category: "Debatedor",
-    phone: "",
+    phone: user?.phone || "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,6 +56,26 @@ export default function InscriptionForm({
 
   return (
     <form onSubmit={handleSubmit} className={cn("space-y-5", className)}>
+      {/* Member exemption banner */}
+      {pricing?.membersFree && isDomusMember && (
+        <div className="flex items-center gap-3 p-4 rounded-[var(--radius-sm)] bg-domus-accent/10 border border-domus-accent/20">
+          <Shield className="w-5 h-5 text-domus-accent flex-shrink-0" />
+          <p className="text-sm text-domus-accent font-medium">
+            Membro DOMUS: isento(a) de taxa!
+          </p>
+        </div>
+      )}
+
+      {/* Pricing info */}
+      {pricing && !isDomusMember && pricing.guestPrice > 0 && (
+        <div className="p-4 rounded-[var(--radius-sm)] border border-domus-border-light bg-domus-background">
+          <p className="text-sm font-medium text-domus-text mb-1">Taxa de participação</p>
+          <p className="text-sm text-domus-text-secondary">
+            {pricing.description || `R$ ${pricing.guestPrice}`}
+          </p>
+        </div>
+      )}
+
       <div>
         <label htmlFor="insc-name" className="block text-sm font-medium text-domus-text mb-1.5">
           Nome completo *

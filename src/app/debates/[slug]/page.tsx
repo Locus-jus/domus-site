@@ -17,6 +17,9 @@ import {
   Users,
   Gavel,
   Building2,
+  FileText,
+  CreditCard,
+  ExternalLink,
 } from "lucide-react";
 
 export default function DebatePage({
@@ -133,6 +136,65 @@ export default function DebatePage({
                   </div>
                 </div>
 
+                {/* Pricing */}
+                {debate.pricing && (
+                  <div className="p-6 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface">
+                    <div className="flex items-center gap-3 mb-3">
+                      <CreditCard className="w-5 h-5 text-domus-primary" />
+                      <h3 className="font-semibold text-domus-text">Taxa de participação</h3>
+                    </div>
+                    <p className="text-sm text-domus-text-secondary">
+                      {debate.pricing.description}
+                    </p>
+                    {debate.pricing.membersFree && (
+                      <p className="text-sm text-domus-accent font-medium mt-2">
+                        Membros DOMUS são isentos de taxa.
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Edital */}
+                {debate.edital && (
+                  <div className="p-6 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface">
+                    <div className="flex items-center gap-3 mb-3">
+                      <FileText className="w-5 h-5 text-domus-primary" />
+                      <h3 className="font-semibold text-domus-text">Edital</h3>
+                    </div>
+                    <a
+                      href={debate.edital}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-domus-primary hover:underline"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Consultar edital completo
+                    </a>
+                  </div>
+                )}
+
+                {/* Tabbycat */}
+                {debate.tabbycatUrl && (
+                  <div className="p-6 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface">
+                    <div className="flex items-center gap-3 mb-3">
+                      <Gavel className="w-5 h-5 text-domus-primary" />
+                      <h3 className="font-semibold text-domus-text">Torneio</h3>
+                    </div>
+                    <p className="text-sm text-domus-text-secondary mb-3">
+                      Acompanhe as rodadas e classificações no Tabbycat.
+                    </p>
+                    <a
+                      href={debate.tabbycatUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-domus-primary hover:underline"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Abrir Tabbycat
+                    </a>
+                  </div>
+                )}
+
                 {/* Organization */}
                 <div className="p-6 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface">
                   <div className="flex items-center gap-3 mb-3">
@@ -222,6 +284,7 @@ export default function DebatePage({
                       <InscriptionForm
                         debateId={debate.id}
                         debateTitle={debate.title}
+                        pricing={debate.pricing}
                       />
                     </div>
                   )}

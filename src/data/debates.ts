@@ -13,6 +13,14 @@ export type DebateParticipation =
   | "intersociedades"
   | "convidados";
 
+export interface DebatePricing {
+  membersFree: boolean;
+  guestPrice: number;
+  nonMemberPrice: number;
+  currency: string;
+  description?: string;
+}
+
 export interface Debate {
   id: string;
   slug: string;
@@ -34,6 +42,9 @@ export interface Debate {
   rules?: string;
   participants?: string[];
   result?: string;
+  edital?: string;
+  pricing?: DebatePricing;
+  tabbycatUrl?: string;
 }
 
 export const debates: Debate[] = [
@@ -57,7 +68,16 @@ export const debates: Debate[] = [
     currentParticipants: 18,
     category: "Institucional",
     rules:
-      "Formato parlamentar com equipes de 2 debatedores. Tempo de fala: 7 minutos por_argumentador. Réplica: 3 minutos. Eliminatória seguida de final.",
+      "Formato parlamentar com equipes de 2 debatedores. Tempo de fala: 7 minutos por argumentador. Réplica: 3 minutos. Eliminatória seguida de final.",
+    edital: "https://www.exemplo.com/edital-domus-open-2026.pdf",
+    pricing: {
+      membersFree: true,
+      guestPrice: 25,
+      nonMemberPrice: 40,
+      currency: "BRL",
+      description: "Membros DOMUS: gratuita. Demais: R$ 25 (estudante) / R$ 40 (não-estudante).",
+    },
+    tabbycatUrl: "https://tabbycat.example.com/tournament/domus-open-2026/",
   },
   {
     id: "2",
@@ -77,6 +97,13 @@ export const debates: Debate[] = [
     maxParticipants: 20,
     currentParticipants: 12,
     category: "Tecnologia",
+    pricing: {
+      membersFree: true,
+      guestPrice: 0,
+      nonMemberPrice: 0,
+      currency: "BRL",
+      description: "Apenas membros DOMUS. Participação gratuita.",
+    },
   },
   {
     id: "3",
@@ -97,6 +124,13 @@ export const debates: Debate[] = [
     participants: ["[Participante A]", "[Participante B]"],
     result: "[Resultado placeholder]",
     category: "Política",
+    pricing: {
+      membersFree: true,
+      guestPrice: 15,
+      nonMemberPrice: 20,
+      currency: "BRL",
+      description: "Membros DOMUS: gratuita. Outras sociedades: R$ 15. Independentes: R$ 20.",
+    },
   },
   {
     id: "4",
@@ -116,6 +150,13 @@ export const debates: Debate[] = [
     participants: ["[Participante C]", "[Participante D]"],
     result: "[Resultado placeholder]",
     category: "Educação",
+    pricing: {
+      membersFree: true,
+      guestPrice: 0,
+      nonMemberPrice: 0,
+      currency: "BRL",
+      description: "Apenas membros DOMUS. Participação gratuita.",
+    },
   },
 ];
 
