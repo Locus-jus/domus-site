@@ -36,13 +36,10 @@ const footerLinks = {
     { href: "/#debates", label: "Debates" },
     { href: "/eventos", label: "Eventos" },
     { href: "/#ideias", label: "Ideias" },
-    { href: "/membros", label: "Membros" },
     { href: "/contato", label: "Contato" },
   ],
   social: [
-    { href: "#", label: "Instagram", icon: InstagramIcon },
-    { href: "#", label: "YouTube", icon: YoutubeIcon },
-    { href: "#", label: "LinkedIn", icon: LinkedinIcon },
+    { href: "https://instagram.com/domus.sddo", label: "Instagram", icon: InstagramIcon },
   ],
 };
 

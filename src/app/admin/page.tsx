@@ -8,6 +8,7 @@ import EventManager from "@/components/admin/EventManager";
 import JudgeManager from "@/components/admin/JudgeManager";
 import DebateManager from "@/components/admin/DebateManager";
 import InscriptionManager from "@/components/admin/InscriptionManager";
+import IdeaManager from "@/components/admin/IdeaManager";
 import { fetchCloudInscriptions } from "@/lib/supabase-data";
 import { debates, formatLabels, participationLabels } from "@/data/debates";
 import { inscriptions, getStoredInscriptions, updateStoredInscription, deleteStoredInscription, type InscriptionStatus } from "@/data/inscriptions";
@@ -37,7 +38,8 @@ type AdminTab =
   | "debates"
   | "inscricoes"
   | "jurados"
-  | "avaliacoes";
+  | "avaliacoes"
+  | "ideias";
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
@@ -65,6 +67,7 @@ export default function AdminPage() {
     { key: "inscricoes" as AdminTab, label: "Inscrições", icon: Users },
     { key: "jurados" as AdminTab, label: "Jurados", icon: Gavel },
     { key: "avaliacoes" as AdminTab, label: "Avaliações", icon: ClipboardCheck },
+    { key: "ideias" as AdminTab, label: "Ideias", icon: FileText },
   ];
 
   const allInscricoes = selectedDebate
@@ -615,6 +618,7 @@ export default function AdminPage() {
               )}
             </div>
           )}
+          {activeTab === "ideias" && <IdeaManager />}
         </div>
       </main>
     </AdminGate>

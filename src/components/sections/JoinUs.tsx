@@ -19,6 +19,7 @@ export default function JoinUs() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    window.location.href = `mailto:domusoratoriaedebates@gmail.com?subject=${encodeURIComponent("Interesse em participar da DOMUS")}&body=${encodeURIComponent(`Nome: ${formData.name}\nE-mail: ${formData.email}\nInstituição: ${formData.institution}\nCurso/Área: ${formData.course}\n\n${formData.message}`)}`;
     setSubmitted(true);
   };
 
