@@ -7,6 +7,7 @@ import AdminGate from "@/components/admin/AdminGate";
 import EventManager from "@/components/admin/EventManager";
 import JudgeManager from "@/components/admin/JudgeManager";
 import DebateManager from "@/components/admin/DebateManager";
+import InscriptionManager from "@/components/admin/InscriptionManager";
 import { fetchCloudInscriptions } from "@/lib/supabase-data";
 import { debates, formatLabels, participationLabels } from "@/data/debates";
 import { inscriptions, getStoredInscriptions, updateStoredInscription, deleteStoredInscription, type InscriptionStatus } from "@/data/inscriptions";
@@ -312,6 +313,9 @@ export default function AdminPage() {
 
           {/* Inscriptions */}
           {activeTab === "inscricoes" && (
+            <InscriptionManager />
+          )}
+          {false && (
             <div className="space-y-6">
               <div className="flex flex-wrap gap-3">
                 <select
