@@ -1,23 +1,22 @@
 "use client";
 
-import { use, useState } from "react";
+import { use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { getDebateBySlug, formatLabels, participationLabels } from "@/data/debates";
+import { getJudgesForDebate } from "@/data/judges";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import InscriptionForm from "@/components/forms/InscriptionForm";
-import Button from "@/components/ui/Button";
 import {
   Calendar,
   Clock,
   MapPin,
-  Users,
   ArrowLeft,
-  Shield,
   Tag,
-  CheckCircle,
+  Users,
+  Gavel,
+  Building2,
 } from "lucide-react";
 
 export default function DebatePage({
@@ -31,6 +30,8 @@ export default function DebatePage({
   if (!debate) {
     notFound();
   }
+
+  const judges = getJudgesForDebate(debate.id);
 
   return (
     <>
@@ -54,20 +55,11 @@ export default function DebatePage({
               <span className="text-xs font-semibold tracking-wider uppercase text-domus-primary bg-domus-primary/10 px-3 py-1 rounded-full">
                 {formatLabels[debate.format]}
               </span>
-              {debate.inscriptionsOpen && (
-                <span className="text-xs font-semibold tracking-wider uppercase text-green-400 bg-green-400/10 px-3 py-1 rounded-full">
-                  Inscrições Abertas
-                </span>
-              )}
             </div>
 
             <h1 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
               {debate.title}
             </h1>
-
-            {debate.subtitle && (
-              <p className="text-lg text-gray-400 mb-2">{debate.subtitle}</p>
-            )}
 
             <p className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl text-domus-accent italic mb-8">
               &ldquo;{debate.theme}&rdquo;
@@ -76,7 +68,13 @@ export default function DebatePage({
             <div className="flex flex-wrap gap-6 text-gray-400">
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-domus-primary" />
-                <span>{new Date(debate.date).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" })}</span>
+                <span>
+                  {new Date(debate.date).toLocaleDateString("pt-BR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-domus-primary" />
@@ -119,13 +117,63 @@ export default function DebatePage({
                   <div className="p-6 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface">
                     <div className="flex items-center gap-3 mb-3">
                       <Users className="w-5 h-5 text-domus-primary" />
-                      <h3 className="font-semibold text-domus-text">Participação</h3>
+                      <h3 className="font-semibold text-domus-text">
+                        Participação
+                      </h3>
                     </div>
                     <p className="text-sm text-domus-text-secondary">
                       {participationLabels[debate.participation]}
                     </p>
+                    {debate.maxParticipants && (
+                      <p className="text-xs text-domus-text-muted mt-2">
+                        {debate.currentParticipants || 0} inscritos de{" "}
+                        {debate.maxParticipants} vagas
+                      </p>
+                    )}
                   </div>
                 </div>
+
+                {/* Organization */}
+                <div className="p-6 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Building2 className="w-5 h-5 text-domus-primary" />
+                    <h3 className="font-semibold text-domus-text">
+                      Organização
+                    </h3>
+                  </div>
+                  <p className="text-sm text-domus-text-secondary">
+                    DOMUS — Sociedade de Debates e Oratória
+                  </p>
+                </div>
+
+                {/* Judges */}
+                {judges.length > 0 && (
+                  <div>
+                    <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-domus-text mb-4">
+                      Jurados
+                    </h2>
+                    <div className="space-y-3">
+                      {judges.map((judge) => (
+                        <div
+                          key={judge.id}
+                          className="flex items-center gap-4 p-4 rounded-[var(--radius-lg)] border border-domus-border-light bg-domus-surface"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-domus-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Gavel className="w-5 h-5 text-domus-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-domus-text text-sm">
+                              {judge.name}
+                            </p>
+                            <p className="text-xs text-domus-text-muted">
+                              {judge.society}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {debate.rules && (
                   <div>
@@ -137,18 +185,6 @@ export default function DebatePage({
                     </p>
                   </div>
                 )}
-
-                {debate.status === "past" && debate.result && (
-                  <div className="p-6 rounded-[var(--radius-lg)] border border-domus-accent/20 bg-domus-accent/5">
-                    <div className="flex items-center gap-3 mb-3">
-                      <CheckCircle className="w-5 h-5 text-domus-accent" />
-                      <h3 className="font-semibold text-domus-text">Resultado</h3>
-                    </div>
-                    <p className="text-sm text-domus-text-secondary">
-                      {debate.result}
-                    </p>
-                  </div>
-                )}
               </div>
 
               {/* Sidebar */}
@@ -156,13 +192,21 @@ export default function DebatePage({
                 <div className="sticky top-24 space-y-6">
                   {debate.inscriptionsOpen && (
                     <div className="p-6 rounded-[var(--radius-xl)] border border-domus-border-light bg-domus-surface shadow-[var(--shadow-sm)]">
-                      <h3 className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text mb-4">
+                      <h3 className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text mb-2">
                         Inscrições
                       </h3>
+                      <p className="text-sm text-domus-text-secondary mb-4">
+                        {debate.participation === "aberto" ||
+                        debate.participation === "intersociedades"
+                          ? "Aberto a participantes de outras sociedades."
+                          : "Apenas para membros DOMUS."}
+                      </p>
                       {debate.maxParticipants && (
                         <div className="mb-4">
                           <div className="flex justify-between text-xs text-domus-text-muted mb-1">
-                            <span>{debate.currentParticipants || 0} inscritos</span>
+                            <span>
+                              {debate.currentParticipants || 0} inscritos
+                            </span>
                             <span>{debate.maxParticipants} vagas</span>
                           </div>
                           <div className="w-full h-2 bg-domus-border-light rounded-full overflow-hidden">
@@ -203,15 +247,6 @@ export default function DebatePage({
                       </p>
                     </div>
                   )}
-
-                  <div className="p-6 rounded-[var(--radius-xl)] border border-domus-border-light bg-domus-surface shadow-[var(--shadow-sm)]">
-                    <h3 className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text mb-3">
-                      Compartilhar
-                    </h3>
-                    <p className="text-xs text-domus-text-muted">
-                      Compartilhe este debate com outros debatedores.
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>

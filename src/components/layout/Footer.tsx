@@ -31,12 +31,12 @@ function LinkedinIcon({ className }: { className?: string }) {
 
 const footerLinks = {
   navegacao: [
-    { href: "/#sobre", label: "A Sociedade" },
+    { href: "/#sobre", label: "A DOMUS" },
     { href: "/#debates", label: "Debates" },
-    { href: "/agenda", label: "Eventos" },
-    { href: "/membros", label: "Membros" },
+    { href: "/eventos", label: "Eventos" },
     { href: "/#ideias", label: "Ideias" },
-    { href: "/#contato", label: "Contato" },
+    { href: "/membros", label: "Membros" },
+    { href: "/contato", label: "Contato" },
   ],
   social: [
     { href: "#", label: "Instagram", icon: InstagramIcon },
@@ -112,7 +112,7 @@ export default function Footer() {
             </div>
             <div className="mt-6">
               <Link
-                href="/#contato"
+                href="/contato"
                 className="text-sm font-semibold text-domus-primary hover:text-domus-primary-light transition-colors"
               >
                 Entre em contato

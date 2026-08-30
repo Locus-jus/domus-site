@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
-import Button from "@/components/ui/Button";
 
 const navLinks = [
-  { href: "/#sobre", label: "A Sociedade" },
+  { href: "/#sobre", label: "A DOMUS" },
   { href: "/#debates", label: "Debates" },
-  { href: "/agenda", label: "Eventos" },
-  { href: "/membros", label: "Membros" },
+  { href: "/eventos", label: "Eventos" },
   { href: "/#ideias", label: "Ideias" },
+  { href: "/membros", label: "Membros" },
+  { href: "/contato", label: "Contato" },
 ];
 
 export default function Navbar() {
@@ -75,12 +75,13 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop CTA */}
+          {/* Desktop Admin link */}
           <div className="hidden md:block">
-            <Link href="/#contato">
-              <Button variant="primary" size="sm">
-                Participe
-              </Button>
+            <Link
+              href="/admin"
+              className="text-xs text-domus-text-muted hover:text-domus-primary transition-colors"
+            >
+              Admin
             </Link>
           </div>
 
@@ -116,10 +117,12 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/#contato" onClick={() => setMobileOpen(false)}>
-            <Button variant="primary" size="lg">
-              Participe
-            </Button>
+          <Link
+            href="/admin"
+            onClick={() => setMobileOpen(false)}
+            className="text-sm text-domus-text-muted hover:text-domus-primary transition-colors"
+          >
+            Área administrativa
           </Link>
         </div>
       </div>

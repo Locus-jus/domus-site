@@ -1,16 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import Button from "@/components/ui/Button";
-import { getUpcomingDebates } from "@/data/debates";
 
 export default function Hero() {
-  const upcoming = getUpcomingDebates();
-  const nextDebate = upcoming[0];
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -36,7 +30,6 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-8 text-center">
-        {/* Logo mark */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,39 +72,20 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl lg:text-3xl text-gray-300 italic mb-4"
+          className="font-[family-name:var(--font-playfair)] text-xl md:text-2xl lg:text-3xl text-gray-300 italic mb-6"
         >
-          Ideias encontram argumentos.
+          Onde ideias encontram argumentos.
         </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.75, ease: "easeOut" }}
-          className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12"
+          className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed"
         >
-          A DOMUS é uma sociedade dedicada ao desenvolvimento da argumentação,
-          da oratória e do pensamento crítico, formando pessoas capazes de
-          defender ideias com clareza, inteligência e excelência.
+          Uma sociedade dedicada ao desenvolvimento da argumentação,
+          da oratória e do pensamento crítico.
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <Link href="/#sobre">
-            <Button variant="primary" size="lg">
-              Conheça a DOMUS
-            </Button>
-          </Link>
-          <Link href="/#debates">
-            <Button variant="outline" size="lg" className="border-gray-600 text-gray-300 hover:bg-white/10 hover:border-white/30 hover:text-white">
-              Próximos debates
-            </Button>
-          </Link>
-        </motion.div>
       </div>
 
       {/* Scroll indicator */}
@@ -121,9 +95,6 @@ export default function Hero() {
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-xs text-gray-500 tracking-wider uppercase">
-          Continuar
-        </span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}

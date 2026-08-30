@@ -2,14 +2,13 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
+import Debates from "@/components/sections/Debates";
 import WhatWeDo from "@/components/sections/WhatWeDo";
 import WhyDomus from "@/components/sections/WhyDomus";
-import Debates from "@/components/sections/Debates";
 import Events from "@/components/sections/Events";
 import Debaters from "@/components/sections/Debaters";
 import Articles from "@/components/sections/Articles";
 import History from "@/components/sections/History";
-import JoinUs from "@/components/sections/JoinUs";
 
 export default function Home() {
   return (
@@ -21,11 +20,9 @@ export default function Home() {
         <Debates />
         <WhatWeDo />
         <WhyDomus />
-        <Events />
-        <Debaters />
         <Articles />
+        <Debaters />
         <History />
-        <JoinUs />
       </main>
       <Footer />
     </>
