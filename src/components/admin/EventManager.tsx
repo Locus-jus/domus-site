@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Plus, Pencil, Trash2, X, Check, Calendar, Clock, MapPin } from "lucide-react";
 import { formatLabels, participationLabels, type DebateFormat, type DebateParticipation } from "@/data/debates";
 import { events as systemEvents } from "@/data/events";
-import { deleteCloudEvent, fetchCloudEvents, upsertCloudEvent } from "@/lib/supabase-data";
+import { deleteCloudEvent, deleteCloudSystemEvent, fetchCloudEvents, upsertCloudEvent } from "@/lib/supabase-data";
 
 export interface ManagedEvent {
   id: string;
@@ -166,6 +166,7 @@ export default function EventManager() {
     const next = [...hiddenSystemEvents, id];
     setHiddenSystemEvents(next);
     localStorage.setItem(HIDDEN_KEY, JSON.stringify(next));
+    void deleteCloudSystemEvent(id);
     window.dispatchEvent(new Event("domus:events-changed"));
   };
 

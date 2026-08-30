@@ -100,6 +100,16 @@ export async function deleteCloudEvent(id: string) {
   if (supabase) await supabase.from("events").delete().eq("id", id);
 }
 
+export async function deleteCloudSystemEvent(id: string) {
+  if (supabase) await supabase.from("deleted_events").upsert({ id });
+}
+
+export async function fetchDeletedSystemEvents(): Promise<string[]> {
+  if (!supabase) return [];
+  const { data } = await supabase.from("deleted_events").select("id");
+  return (data || []).map((item) => String(item.id));
+}
+
 export async function fetchCloudJudges(): Promise<Judge[] | null> {
   if (!supabase) return null;
   const { data, error } = await supabase.from("judges").select("*").order("name");

@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 import { debates, formatLabels } from "@/data/debates";
 import { events } from "@/data/events";
 import { loadManagedEvents, type ManagedEvent } from "@/components/admin/EventManager";
-import { fetchCloudEvents } from "@/lib/supabase-data";
+import { fetchCloudEvents, fetchDeletedSystemEvents } from "@/lib/supabase-data";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 
@@ -20,6 +20,7 @@ export default function EventosPage() {
     setManagedEvents(loadManagedEvents());
     try { setHiddenSystemEvents(JSON.parse(localStorage.getItem("domus_hidden_system_events") || "[]")); } catch { setHiddenSystemEvents([]); }
     void fetchCloudEvents().then((cloud) => { if (cloud) setManagedEvents(cloud); });
+    void fetchDeletedSystemEvents().then((deleted) => { if (deleted.length) setHiddenSystemEvents((current) => [...new Set([...current, ...deleted])]); });
     const refresh = () => setManagedEvents(loadManagedEvents());
     window.addEventListener("storage", refresh);
     const onEventsChanged = () => { try { setHiddenSystemEvents(JSON.parse(localStorage.getItem("domus_hidden_system_events") || "[]")); } catch {} };

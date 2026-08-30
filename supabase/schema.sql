@@ -65,10 +65,16 @@ create table if not exists public.judges (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.deleted_events (
+  id text primary key,
+  deleted_at timestamptz not null default now()
+);
+
 alter table public.debates enable row level security;
 alter table public.inscriptions enable row level security;
 alter table public.events enable row level security;
 alter table public.judges enable row level security;
+alter table public.deleted_events enable row level security;
 create policy "public can read debates" on public.debates for select using (true);
 create policy "public can read inscriptions" on public.inscriptions for select using (true);
 create policy "public can submit inscriptions" on public.inscriptions for insert with check (true);
@@ -77,3 +83,5 @@ create policy "public can read events" on public.events for select using (true);
 create policy "public can manage events" on public.events for all using (true) with check (true);
 create policy "public can read judges" on public.judges for select using (true);
 create policy "public can manage judges" on public.judges for all using (true) with check (true);
+create policy "public can read deleted events" on public.deleted_events for select using (true);
+create policy "public can manage deleted events" on public.deleted_events for all using (true) with check (true);
