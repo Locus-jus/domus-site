@@ -19,11 +19,12 @@ export interface ManagedEvent {
   inscriptionsOpen: boolean;
   maxParticipants?: number;
   currentParticipants: number;
+  editalUrl?: string;
 }
 
 const STORAGE_KEY = "domus_managed_events";
 
-function loadEvents(): ManagedEvent[] {
+export function loadManagedEvents(): ManagedEvent[] {
   if (typeof window === "undefined") return [];
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored ? JSON.parse(stored) : [];
@@ -45,6 +46,7 @@ const defaultEvent: Omit<ManagedEvent, "id" | "currentParticipants"> = {
   status: "upcoming",
   inscriptionsOpen: false,
   maxParticipants: 30,
+  editalUrl: "",
 };
 
 export default function EventManager() {
@@ -55,7 +57,7 @@ export default function EventManager() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
-    setEvents(loadEvents());
+    setEvents(loadManagedEvents());
   }, []);
 
   const handleChange = (
@@ -73,6 +75,15 @@ export default function EventManager() {
           ? Number(value)
           : value,
     }));
+  };
+
+  const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf") return;
+    const reader = new FileReader();
+    reader.onload = () => setFormData((prev) => ({ ...prev, editalUrl: String(reader.result) }));
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -168,7 +179,28 @@ export default function EventManager() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-domus-text mb-1.5">
+                  Edital em PDF (URL ou arquivo)
+                </label>
+                <input
+                  name="editalUrl"
+                  type="text"
+                  value={formData.editalUrl}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-[var(--radius-sm)] border border-domus-border bg-domus-background text-domus-text text-sm focus:outline-none focus:ring-2 focus:ring-domus-primary/30 focus:border-domus-primary transition-colors"
+                  placeholder="https://.../edital.pdf"
+                />
+                <input
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  onChange={handlePdfChange}
+                  className="mt-2 block w-full text-sm text-domus-text-muted file:mr-3 file:rounded file:border-0 file:bg-domus-primary file:px-3 file:py-2 file:text-white"
+                />
+                <p className="text-xs text-domus-text-muted mt-1">Publique o PDF em um serviço de arquivos e cole aqui o link direto.</p>
+              </div>
+
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-domus-text mb-1.5">
                   Nome do evento *

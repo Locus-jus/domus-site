@@ -49,6 +49,22 @@ export const inscriptions: Inscription[] = [
   },
 ];
 
+export const INSCRIPTIONS_STORAGE_KEY = "domus_inscriptions";
+
+export function getStoredInscriptions(): Inscription[] {
+  if (typeof window === "undefined") return inscriptions;
+  try {
+    const stored = localStorage.getItem(INSCRIPTIONS_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : inscriptions;
+  } catch {
+    return inscriptions;
+  }
+}
+
+function saveStoredInscriptions(items: Inscription[]) {
+  localStorage.setItem(INSCRIPTIONS_STORAGE_KEY, JSON.stringify(items));
+}
+
 export function getInscriptionsByDebate(debateId: string): Inscription[] {
   return inscriptions.filter((i) => i.debateId === debateId);
 }
@@ -61,5 +77,18 @@ export function addInscription(inscription: Omit<Inscription, "id" | "status" | 
     createdAt: new Date().toISOString().split("T")[0],
   };
   inscriptions.push(newInscription);
+  saveStoredInscriptions([...getStoredInscriptions(), newInscription]);
   return newInscription;
+}
+
+export function updateStoredInscription(id: string, changes: Partial<Inscription>) {
+  const updated = getStoredInscriptions().map((item) => item.id === id ? { ...item, ...changes } : item);
+  saveStoredInscriptions(updated);
+  return updated;
+}
+
+export function deleteStoredInscription(id: string) {
+  const updated = getStoredInscriptions().filter((item) => item.id !== id);
+  saveStoredInscriptions(updated);
+  return updated;
 }

@@ -6,6 +6,7 @@ import Button from "@/components/ui/Button";
 import { Send, CheckCircle, Shield } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import type { DebatePricing } from "@/data/debates";
+import { addInscription, getStoredInscriptions } from "@/data/inscriptions";
 
 interface InscriptionFormProps {
   debateId: string;
@@ -34,6 +35,25 @@ export default function InscriptionForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const existing = getStoredInscriptions().some(
+      (inscription) =>
+        inscription.debateId === debateId &&
+        inscription.email.toLowerCase() === formData.email.toLowerCase()
+    );
+    if (existing) {
+      setSubmitted(true);
+      return;
+    }
+
+    addInscription({
+      debateId,
+      name: formData.name,
+      email: formData.email,
+      society: formData.society === "outra" ? formData.customSociety : formData.society === "independente" ? "Independente" : formData.society,
+      institution: formData.institution,
+      category: formData.category,
+      phone: formData.phone,
+    });
     setSubmitted(true);
   };
 

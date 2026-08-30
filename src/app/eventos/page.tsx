@@ -1,24 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { debates, formatLabels } from "@/data/debates";
 import { events } from "@/data/events";
+import { loadManagedEvents, type ManagedEvent } from "@/components/admin/EventManager";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 
 export default function EventosPage() {
   const [tab, setTab] = useState<"proximos" | "realizados">("proximos");
+  const [managedEvents, setManagedEvents] = useState<ManagedEvent[]>([]);
+
+  useEffect(() => {
+    setManagedEvents(loadManagedEvents());
+    const refresh = () => setManagedEvents(loadManagedEvents());
+    window.addEventListener("storage", refresh);
+    return () => window.removeEventListener("storage", refresh);
+  }, []);
 
   const upcomingDebates = debates.filter((d) => d.status === "upcoming");
   const pastDebates = debates.filter((d) => d.status === "past");
   const upcomingEvents = events.filter((e) => e.status !== "closed");
   const pastEvents = events.filter((e) => e.status === "closed");
+  const managedUpcoming = managedEvents.filter((e) => e.status === "upcoming");
+  const managedPast = managedEvents.filter((e) => e.status === "past");
 
-  const hasUpcoming = upcomingDebates.length > 0 || upcomingEvents.length > 0;
-  const hasPast = pastDebates.length > 0 || pastEvents.length > 0;
+  const hasUpcoming = upcomingDebates.length > 0 || upcomingEvents.length > 0 || managedUpcoming.length > 0;
+  const hasPast = pastDebates.length > 0 || pastEvents.length > 0 || managedPast.length > 0;
 
   return (
     <>
@@ -128,7 +139,22 @@ export default function EventosPage() {
                   </div>
                 )}
 
-                {/* Upcoming Events */}
+                 {/* Managed upcoming events */}
+                 {managedUpcoming.length > 0 && (
+                   <div className="mb-8 space-y-4">
+                     {managedUpcoming.map((event) => (
+                       <div key={event.id} className="bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)] p-6">
+                         <span className="text-xs font-semibold tracking-wider uppercase text-domus-accent">{event.type}</span>
+                         <h3 className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text mt-2">{event.name}</h3>
+                         <p className="text-sm text-domus-text-secondary my-2">{event.description}</p>
+                         <p className="text-sm text-domus-text-muted">{new Date(event.date).toLocaleDateString("pt-BR")} · {event.time} · {event.location}</p>
+                         {event.editalUrl && <a href={event.editalUrl} target="_blank" rel="noreferrer" className="inline-block mt-3 text-sm text-domus-primary hover:underline">Consultar edital em PDF</a>}
+                       </div>
+                     ))}
+                   </div>
+                 )}
+
+                 {/* Upcoming Events */}
                 {upcomingEvents.length > 0 && (
                   <div>
                     <h2 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-domus-text mb-6">
@@ -260,6 +286,12 @@ export default function EventosPage() {
                         </div>
                       ))}
                     </div>
+                  </div>
+                )}
+
+                {managedPast.length > 0 && (
+                  <div className="space-y-4">
+                    {managedPast.map((event) => <div key={event.id} className="bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)] p-6 opacity-75"><h3 className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text">{event.name}</h3><p className="text-sm text-domus-text-muted mt-2">{new Date(event.date).toLocaleDateString("pt-BR")} · {event.location}</p></div>)}
                   </div>
                 )}
 

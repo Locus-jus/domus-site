@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import AdminGate from "@/components/admin/AdminGate";
 import EventManager from "@/components/admin/EventManager";
+import JudgeManager from "@/components/admin/JudgeManager";
 import { debates, formatLabels, participationLabels } from "@/data/debates";
-import { inscriptions, getInscriptionsByDebate } from "@/data/inscriptions";
+import { inscriptions, getStoredInscriptions, updateStoredInscription, deleteStoredInscription, type InscriptionStatus } from "@/data/inscriptions";
 import { judges } from "@/data/judges";
 import { evaluations } from "@/data/evaluations";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,14 @@ export default function AdminPage() {
   const [inscFilter, setInscFilter] = useState<
     "todos" | "domus" | "externas" | "independentes" | "confirmadas" | "pendentes"
   >("todos");
+  const [adminInscriptions, setAdminInscriptions] = useState(inscriptions);
+
+  useEffect(() => {
+    const refresh = () => setAdminInscriptions(getStoredInscriptions());
+    refresh();
+    window.addEventListener("storage", refresh);
+    return () => window.removeEventListener("storage", refresh);
+  }, []);
 
   const tabs = [
     { key: "dashboard" as AdminTab, label: "Dashboard", icon: LayoutDashboard },
@@ -52,8 +61,8 @@ export default function AdminPage() {
   ];
 
   const allInscricoes = selectedDebate
-    ? getInscriptionsByDebate(selectedDebate)
-    : inscriptions;
+    ? adminInscriptions.filter((i) => i.debateId === selectedDebate)
+    : adminInscriptions;
 
   const filteredInscricoes = allInscricoes.filter((i) => {
     if (inscFilter === "todos") return true;
@@ -115,12 +124,12 @@ export default function AdminPage() {
                   { label: "Debates", value: debates.length, icon: FileText },
                   {
                     label: "Inscrições",
-                    value: inscriptions.length,
+                     value: adminInscriptions.length,
                     icon: Users,
                   },
                   {
                     label: "Pendentes",
-                    value: inscriptions.filter((i) => i.status === "pendente")
+                     value: adminInscriptions.filter((i) => i.status === "pendente")
                       .length,
                     icon: Clock,
                   },
@@ -356,6 +365,7 @@ export default function AdminPage() {
                         <th className="py-3 px-4 text-xs font-semibold tracking-wider uppercase text-domus-text-muted">
                           Debate
                         </th>
+                        <th className="py-3 px-4 text-xs font-semibold tracking-wider uppercase text-domus-text-muted">Ações</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -411,13 +421,34 @@ export default function AdminPage() {
                             <td className="py-3 px-4 text-sm text-domus-text-secondary">
                               {debate?.title || "—"}
                             </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-2">
+                                <select
+                                  value={insc.status}
+                                  onChange={(e) => {
+                                    const next = updateStoredInscription(insc.id, { status: e.target.value as InscriptionStatus });
+                                    setAdminInscriptions(next);
+                                  }}
+                                  className="px-2 py-1 text-xs border border-domus-border rounded bg-domus-surface text-domus-text"
+                                  aria-label={`Status de ${insc.name}`}
+                                >
+                                  <option value="pendente">Pendente</option>
+                                  <option value="confirmada">Confirmada</option>
+                                  <option value="cancelada">Cancelada</option>
+                                </select>
+                                <button
+                                  onClick={() => setAdminInscriptions(deleteStoredInscription(insc.id))}
+                                  className="text-xs text-red-500 hover:text-red-700"
+                                >Excluir</button>
+                              </div>
+                            </td>
                           </tr>
                         );
                       })}
                       {filteredInscricoes.length === 0 && (
                         <tr>
                           <td
-                            colSpan={5}
+                            colSpan={6}
                             className="py-8 text-center text-domus-text-muted"
                           >
                             Nenhuma inscrição encontrada.
@@ -441,6 +472,7 @@ export default function AdminPage() {
           {/* Judges */}
           {activeTab === "jurados" && (
             <div className="space-y-6">
+              <JudgeManager />
               <div className="bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)] overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
