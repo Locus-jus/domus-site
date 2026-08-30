@@ -7,6 +7,7 @@ import { Send, CheckCircle, Shield } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import type { DebatePricing } from "@/data/debates";
 import { addInscription, getStoredInscriptions } from "@/data/inscriptions";
+import { insertCloudInscription, seedCloudDebates } from "@/lib/supabase-data";
 
 interface InscriptionFormProps {
   debateId: string;
@@ -33,7 +34,7 @@ export default function InscriptionForm({
     phone: user?.phone || "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const existing = getStoredInscriptions().some(
       (inscription) =>
@@ -45,7 +46,7 @@ export default function InscriptionForm({
       return;
     }
 
-    addInscription({
+    const newInscription = addInscription({
       debateId,
       name: formData.name,
       email: formData.email,
@@ -54,6 +55,8 @@ export default function InscriptionForm({
       category: formData.category,
       phone: formData.phone,
     });
+    await seedCloudDebates();
+    await insertCloudInscription(newInscription);
     window.dispatchEvent(new Event("domus:inscriptions-changed"));
     const emailBody = [
       `Nova inscrição: ${debateTitle}`,

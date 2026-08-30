@@ -84,7 +84,6 @@ export function addInscription(inscription: Omit<Inscription, "id" | "status" | 
   };
   inscriptions.push(newInscription);
   saveStoredInscriptions([...getStoredInscriptions(), newInscription]);
-  void import("@/lib/supabase-data").then(({ insertCloudInscription }) => insertCloudInscription(newInscription));
   return newInscription;
 }
 
