@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Plus, Pencil, Trash2, X, Check, Calendar, Clock, MapPin } from "lucide-react";
 import { formatLabels, participationLabels, type DebateFormat, type DebateParticipation } from "@/data/debates";
+import { events as systemEvents } from "@/data/events";
 import { deleteCloudEvent, fetchCloudEvents, upsertCloudEvent } from "@/lib/supabase-data";
 
 export interface ManagedEvent {
@@ -24,6 +25,7 @@ export interface ManagedEvent {
 }
 
 const STORAGE_KEY = "domus_managed_events";
+const HIDDEN_KEY = "domus_hidden_system_events";
 
 export function loadManagedEvents(): ManagedEvent[] {
   if (typeof window === "undefined") return [];
@@ -56,10 +58,12 @@ export default function EventManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState(defaultEvent);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [hiddenSystemEvents, setHiddenSystemEvents] = useState<string[]>([]);
 
   useEffect(() => {
     let active = true;
     setEvents(loadManagedEvents());
+    try { setHiddenSystemEvents(JSON.parse(localStorage.getItem(HIDDEN_KEY) || "[]")); } catch { setHiddenSystemEvents([]); }
     void fetchCloudEvents().then((cloud) => { if (active && cloud) setEvents(cloud); });
     return () => { active = false; };
   }, []);
@@ -148,6 +152,13 @@ export default function EventManager() {
     setShowForm(false);
     setEditingId(null);
     setFormData(defaultEvent);
+  };
+
+  const removeSystemEvent = (id: string) => {
+    const next = [...hiddenSystemEvents, id];
+    setHiddenSystemEvents(next);
+    localStorage.setItem(HIDDEN_KEY, JSON.stringify(next));
+    window.dispatchEvent(new Event("domus:events-changed"));
   };
 
   return (
@@ -403,6 +414,17 @@ export default function EventManager() {
       )}
 
       {/* Events list */}
+      {systemEvents.filter((event) => !hiddenSystemEvents.includes(event.id)).length > 0 && (
+        <div className="space-y-3">
+          <h3 className="font-semibold text-domus-text">Eventos antigos do sistema</h3>
+          {systemEvents.filter((event) => !hiddenSystemEvents.includes(event.id)).map((event) => (
+            <div key={event.id} className="flex items-center justify-between gap-4 p-5 bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)]">
+              <div><p className="font-medium text-domus-text">{event.name}</p><p className="text-sm text-domus-text-muted">{event.category} · {event.date}</p></div>
+              <button onClick={() => removeSystemEvent(event.id)} className="inline-flex items-center gap-2 px-3 py-2 text-sm text-red-500 border border-red-200 rounded"><Trash2 className="w-4 h-4" /> Remover</button>
+            </div>
+          ))}
+        </div>
+      )}
       <div className="space-y-3">
         {events.length === 0 && !showForm && (
           <div className="text-center py-12 bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)]">

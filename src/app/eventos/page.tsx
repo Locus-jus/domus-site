@@ -14,19 +14,24 @@ import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 export default function EventosPage() {
   const [tab, setTab] = useState<"proximos" | "realizados">("proximos");
   const [managedEvents, setManagedEvents] = useState<ManagedEvent[]>([]);
+  const [hiddenSystemEvents, setHiddenSystemEvents] = useState<string[]>([]);
 
   useEffect(() => {
     setManagedEvents(loadManagedEvents());
+    try { setHiddenSystemEvents(JSON.parse(localStorage.getItem("domus_hidden_system_events") || "[]")); } catch { setHiddenSystemEvents([]); }
     void fetchCloudEvents().then((cloud) => { if (cloud) setManagedEvents(cloud); });
     const refresh = () => setManagedEvents(loadManagedEvents());
     window.addEventListener("storage", refresh);
-    return () => window.removeEventListener("storage", refresh);
+    const onEventsChanged = () => { try { setHiddenSystemEvents(JSON.parse(localStorage.getItem("domus_hidden_system_events") || "[]")); } catch {} };
+    window.addEventListener("domus:events-changed", onEventsChanged);
+    return () => { window.removeEventListener("storage", refresh); window.removeEventListener("domus:events-changed", onEventsChanged); };
   }, []);
 
   const upcomingDebates = debates.filter((d) => d.status === "upcoming");
   const pastDebates = debates.filter((d) => d.status === "past");
-  const upcomingEvents = events.filter((e) => e.status !== "closed");
-  const pastEvents = events.filter((e) => e.status === "closed");
+  const visibleEvents = events.filter((e) => !hiddenSystemEvents.includes(e.id));
+  const upcomingEvents = visibleEvents.filter((e) => e.status !== "closed");
+  const pastEvents = visibleEvents.filter((e) => e.status === "closed");
   const managedUpcoming = managedEvents.filter((e) => e.status === "upcoming");
   const managedPast = managedEvents.filter((e) => e.status === "past");
 
