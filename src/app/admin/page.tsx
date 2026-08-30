@@ -10,6 +10,7 @@ import DebateManager from "@/components/admin/DebateManager";
 import InscriptionManager from "@/components/admin/InscriptionManager";
 import IdeaManager from "@/components/admin/IdeaManager";
 import { fetchCloudInscriptions } from "@/lib/supabase-data";
+import { fetchCloudDebates, fetchCloudEvents, fetchCloudJudges } from "@/lib/supabase-data";
 import { debates, formatLabels, participationLabels } from "@/data/debates";
 import { inscriptions, getStoredInscriptions, updateStoredInscription, deleteStoredInscription, type InscriptionStatus } from "@/data/inscriptions";
 import { judges } from "@/data/judges";
@@ -48,6 +49,7 @@ export default function AdminPage() {
     "todos" | "domus" | "externas" | "independentes" | "confirmadas" | "pendentes"
   >("todos");
   const [adminInscriptions, setAdminInscriptions] = useState(inscriptions);
+  const [dashboardCounts, setDashboardCounts] = useState({ debates: debates.length, eventos: 0, jurados: judges.length });
 
   useEffect(() => {
     const refresh = () => {
@@ -55,6 +57,9 @@ export default function AdminPage() {
       void fetchCloudInscriptions().then((cloud) => { if (cloud) setAdminInscriptions(cloud); });
     };
     refresh();
+    void Promise.all([fetchCloudDebates(), fetchCloudEvents(), fetchCloudJudges()]).then(([cloudDebates, cloudEvents, cloudJudges]) => {
+      setDashboardCounts({ debates: cloudDebates?.length || debates.length, eventos: cloudEvents?.length || 0, jurados: cloudJudges?.length || judges.length });
+    });
     const interval = window.setInterval(refresh, 10000);
     window.addEventListener("storage", refresh);
     return () => { window.clearInterval(interval); window.removeEventListener("storage", refresh); };
@@ -131,7 +136,7 @@ export default function AdminPage() {
             <div className="space-y-8">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {[
-                  { label: "Debates", value: debates.length, icon: FileText },
+                   { label: "Debates", value: dashboardCounts.debates, icon: FileText },
                   {
                     label: "Inscrições",
                      value: adminInscriptions.length,
@@ -143,18 +148,13 @@ export default function AdminPage() {
                       .length,
                     icon: Clock,
                   },
-                  { label: "Jurados", value: judges.length, icon: Gavel },
+                   { label: "Jurados", value: dashboardCounts.jurados, icon: Gavel },
                   {
                     label: "Avaliações",
                     value: evaluations.length,
                     icon: ClipboardCheck,
                   },
-                  {
-                    label: "Próximos",
-                    value: debates.filter((d) => d.status === "upcoming")
-                      .length,
-                    icon: FileText,
-                  },
+                   { label: "Eventos", value: dashboardCounts.eventos, icon: Calendar },
                 ].map((card, i) => {
                   const Icon = card.icon;
                   return (
