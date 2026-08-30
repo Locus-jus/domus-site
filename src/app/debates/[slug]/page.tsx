@@ -8,6 +8,17 @@ import { getJudgesForDebate } from "@/data/judges";
 import { getManagedDebates } from "@/components/admin/DebateManager";
 import { getInscriptionCount } from "@/data/inscriptions";
 import { fetchCloudDebates } from "@/lib/supabase-data";
+
+function PdfLink({ href }: { href: string }) {
+  const openPdf = async () => {
+    if (!href.startsWith("data:")) return;
+    const blob = await fetch(href).then((response) => response.blob());
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+  if (!href.startsWith("data:")) return <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-domus-primary hover:underline"><ExternalLink className="w-4 h-4" /> Consultar edital completo</a>;
+  return <button type="button" onClick={() => void openPdf()} className="inline-flex items-center gap-2 text-sm text-domus-primary hover:underline"><ExternalLink className="w-4 h-4" /> Abrir edital em PDF</button>;
+}
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import InscriptionForm from "@/components/forms/InscriptionForm";
@@ -211,15 +222,7 @@ export default function DebatePage({
                       <FileText className="w-5 h-5 text-domus-primary" />
                       <h3 className="font-semibold text-domus-text">Edital</h3>
                     </div>
-                    <a
-                      href={debate.edital}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm text-domus-primary hover:underline"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Consultar edital completo
-                    </a>
+                    <PdfLink href={debate.edital} />
                   </div>
                 )}
 
