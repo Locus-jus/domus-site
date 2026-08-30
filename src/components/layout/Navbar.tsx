@@ -20,7 +20,7 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, logout, isLoading } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,7 +84,7 @@ export default function Navbar() {
 
           {/* Desktop User / Admin links */}
           <div className="hidden md:flex items-center gap-4">
-            {user ? (
+            {user && (
               <>
                 <Link
                   href="/perfil"
@@ -100,13 +100,6 @@ export default function Navbar() {
                   Sair
                 </button>
               </>
-            ) : (
-              <Link
-                href="/login"
-                className="text-sm font-medium text-domus-text-secondary hover:text-domus-primary transition-colors"
-              >
-                Entrar
-              </Link>
             )}
             <Link
               href="/admin"
@@ -155,7 +148,7 @@ export default function Navbar() {
           >
             Área administrativa
           </Link>
-          {!isLoading && user ? (
+          {user ? (
             <>
               <Link
                 href="/perfil"
@@ -174,15 +167,7 @@ export default function Navbar() {
                 Sair da conta
               </button>
             </>
-          ) : (
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-domus-text hover:text-domus-primary transition-colors"
-            >
-              Entrar
-            </Link>
-          )}
+          ) : null}
         </div>
       </div>
     </>
