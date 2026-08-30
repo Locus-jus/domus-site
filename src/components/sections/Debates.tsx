@@ -16,7 +16,8 @@ export default function Debates() {
     refresh();
     void fetchCloudDebates().then((cloud) => { if (cloud) setUpcoming(cloud.filter((debate) => debate.status === "upcoming")); });
     window.addEventListener("storage", refresh);
-    return () => window.removeEventListener("storage", refresh);
+    window.addEventListener("domus:debates-changed", refresh);
+    return () => { window.removeEventListener("storage", refresh); window.removeEventListener("domus:debates-changed", refresh); };
   }, []);
 
   return (

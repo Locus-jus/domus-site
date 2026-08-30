@@ -42,7 +42,7 @@ export default function DebatePage({
     setDebate(local);
     void fetchCloudDebates().then((cloud) => {
       if (!active) return;
-      const current = cloud?.find((item) => item.slug === slug) || local;
+      const current = cloud ? cloud.find((item) => item.slug === slug) : local;
       setDebate(current);
       setParticipantCount(current ? getInscriptionCount(current.id, current.currentParticipants) : 0);
       setLoaded(true);
