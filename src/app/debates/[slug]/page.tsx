@@ -226,7 +226,7 @@ export default function DebatePage({
                       <FileText className="w-5 h-5 text-domus-primary" />
                       <h3 className="font-semibold text-domus-text">Edital</h3>
                     </div>
-                    <PdfLink href={debate.edital} />
+                    <PdfLink href={debate.edital.startsWith("data:") ? `/api/editais/${debate.id}` : debate.edital} />
                   </div>
                 )}
 
