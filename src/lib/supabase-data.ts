@@ -14,7 +14,7 @@ function toRow(debate: Debate) {
     participation: debate.participation, status: debate.status,
     inscriptions_open: debate.inscriptionsOpen, max_participants: debate.maxParticipants,
     current_participants: debate.currentParticipants || 0, category: debate.category,
-    rules: debate.rules, edital: debate.edital, is_paid: debate.isPaid, tabbycat_url: debate.tabbycatUrl,
+    rules: debate.rules, edital: debate.edital, tabbycat_url: debate.tabbycatUrl,
   };
 }
 
