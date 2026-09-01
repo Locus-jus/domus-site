@@ -9,6 +9,7 @@ import { events } from "@/data/events";
 import { loadManagedEvents, type ManagedEvent } from "@/components/admin/EventManager";
 import { fetchCloudEvents, fetchDeletedSystemEvents } from "@/lib/supabase-data";
 import { fetchCloudDebates } from "@/lib/supabase-data";
+import PdfLink from "@/components/ui/PdfLink";
 import { cn } from "@/lib/utils";
 import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 
@@ -160,7 +161,7 @@ export default function EventosPage() {
                          <p className="text-sm text-domus-text-secondary my-2">{event.description}</p>
                          <p className="text-sm text-domus-text-muted">{new Date(event.date).toLocaleDateString("pt-BR")} · {event.time} · {event.location}</p>
                          <p className="text-xs text-domus-text-muted mt-2">{formatLabels[event.format]} · {event.participation === "interno" ? "Apenas membros DOMUS" : "Aberto a participantes"}{event.maxParticipants ? ` · ${event.maxParticipants} vagas` : ""}</p>
-                         {event.editalUrl && <a href={event.editalUrl} target="_blank" rel="noreferrer" className="inline-block mt-3 text-sm text-domus-primary hover:underline">Consultar edital em PDF</a>}
+                         {event.editalUrl && <div className="mt-3"><PdfLink href={event.editalUrl} label="Consultar edital em PDF" /></div>}
                        </Link>
                      ))}
                    </div>
