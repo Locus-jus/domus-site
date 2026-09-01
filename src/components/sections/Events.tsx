@@ -1,20 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import EventCard from "@/components/cards/EventCard";
 import { events } from "@/data/events";
+import { loadManagedEvents } from "@/components/admin/EventManager";
+import { fetchCloudEvents } from "@/lib/supabase-data";
 import { cn } from "@/lib/utils";
 
 const categories = ["Todos", "Formação", "Palestra", "Institucional", "Competição"];
 
 export default function Events() {
   const [activeCategory, setActiveCategory] = useState("Todos");
+  const [currentEvents, setCurrentEvents] = useState(events);
+
+  useEffect(() => {
+    const load = () => setCurrentEvents(loadManagedEvents().map((event) => ({ id: event.id, name: event.name, description: event.description, date: event.date, time: event.time, location: event.location, status: event.status === "upcoming" ? (event.inscriptionsOpen ? "open" : "soon") : "closed", category: event.type })));
+    load();
+    void fetchCloudEvents().then((cloud) => { if (cloud) setCurrentEvents(cloud.map((event) => ({ id: event.id, name: event.name, description: event.description, date: event.date, time: event.time, location: event.location, status: event.status === "upcoming" ? (event.inscriptionsOpen ? "open" : "soon") : "closed", category: event.type }))); });
+    window.addEventListener("storage", load);
+    return () => window.removeEventListener("storage", load);
+  }, []);
 
   const filtered =
     activeCategory === "Todos"
-      ? events
-      : events.filter((e) => e.category === activeCategory);
+      ? currentEvents
+      : currentEvents.filter((e) => e.category === activeCategory);
 
   return (
     <section id="eventos" className="py-24 md:py-32 bg-white">
