@@ -154,14 +154,14 @@ export default function EventosPage() {
                  {managedUpcoming.length > 0 && (
                    <div className="mb-8 space-y-4">
                      {managedUpcoming.map((event) => (
-                       <div key={event.id} className="bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)] p-6">
+                         <Link href={`/eventos/${event.id}`} key={event.id} className="block bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)] p-6 hover:border-domus-primary/30 hover:shadow-[var(--shadow-md)] transition-all">
                          <span className="text-xs font-semibold tracking-wider uppercase text-domus-accent">{event.type}</span>
                          <h3 className="font-[family-name:var(--font-playfair)] text-lg font-bold text-domus-text mt-2">{event.name}</h3>
                          <p className="text-sm text-domus-text-secondary my-2">{event.description}</p>
                          <p className="text-sm text-domus-text-muted">{new Date(event.date).toLocaleDateString("pt-BR")} · {event.time} · {event.location}</p>
                          <p className="text-xs text-domus-text-muted mt-2">{formatLabels[event.format]} · {event.participation === "interno" ? "Apenas membros DOMUS" : "Aberto a participantes"}{event.maxParticipants ? ` · ${event.maxParticipants} vagas` : ""}</p>
                          {event.editalUrl && <a href={event.editalUrl} target="_blank" rel="noreferrer" className="inline-block mt-3 text-sm text-domus-primary hover:underline">Consultar edital em PDF</a>}
-                       </div>
+                       </Link>
                      ))}
                    </div>
                  )}
