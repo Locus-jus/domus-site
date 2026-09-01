@@ -15,7 +15,7 @@ import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
 export default function EventosPage() {
   const [tab, setTab] = useState<"proximos" | "realizados">("proximos");
   const [managedEvents, setManagedEvents] = useState<ManagedEvent[]>([]);
-  const [publicDebates, setPublicDebates] = useState(debates);
+  const [publicDebates, setPublicDebates] = useState<typeof debates>([]);
   const [hiddenSystemEvents, setHiddenSystemEvents] = useState<string[]>([]);
 
   useEffect(() => {
