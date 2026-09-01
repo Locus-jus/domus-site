@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Plus, Pencil, Trash2, X, Check, Calendar, Clock, MapPin } from "lucide-react";
-import { debates as systemDebates, formatLabels, participationLabels, type DebateFormat, type DebateParticipation } from "@/data/debates";
+import { formatLabels, participationLabels, type DebateFormat, type DebateParticipation } from "@/data/debates";
 import { events as systemEvents } from "@/data/events";
-import { deleteCloudDebate, deleteCloudEvent, deleteCloudSystemEvent, fetchCloudEvents, upsertCloudEvent } from "@/lib/supabase-data";
+import { deleteCloudEvent, deleteCloudSystemEvent, fetchCloudEvents, upsertCloudEvent } from "@/lib/supabase-data";
 
 export interface ManagedEvent {
   id: string;
@@ -174,11 +174,6 @@ export default function EventManager() {
     window.dispatchEvent(new Event("domus:events-changed"));
   };
 
-  const removeSystemDebate = (id: string) => {
-    const next = JSON.parse(localStorage.getItem("domus_managed_debates") || "[]").filter((item: { id: string }) => item.id !== id);
-    localStorage.setItem("domus_managed_debates", JSON.stringify(next));
-    window.dispatchEvent(new Event("domus:debates-changed"));
-  };
 
   return (
     <div className="space-y-6">
@@ -433,17 +428,6 @@ export default function EventManager() {
       )}
 
       {/* Events list */}
-      {systemDebates.filter((debate) => debate.status === "upcoming").length > 0 && (
-        <div className="space-y-3">
-          <h3 className="font-semibold text-domus-text">Debates em próximos</h3>
-          {systemDebates.filter((debate) => debate.status === "upcoming").map((debate) => (
-            <div key={debate.id} className="flex items-center justify-between gap-4 p-5 bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)]">
-              <div><p className="font-medium text-domus-text">{debate.title}</p><p className="text-sm text-domus-text-muted">{debate.date} · {debate.time}</p></div>
-              <button onClick={() => { removeSystemDebate(debate.id); void deleteCloudDebate(debate.id); }} className="inline-flex items-center gap-2 px-3 py-2 text-sm text-red-500 border border-red-200 rounded"><Trash2 className="w-4 h-4" /> Remover</button>
-            </div>
-          ))}
-        </div>
-      )}
       {systemEvents.filter((event) => !hiddenSystemEvents.includes(event.id)).length > 0 && (
         <div className="space-y-3">
           <h3 className="font-semibold text-domus-text">Eventos antigos do sistema</h3>
