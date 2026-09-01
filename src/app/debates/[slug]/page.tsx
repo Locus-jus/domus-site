@@ -12,7 +12,11 @@ import { fetchCloudDebates } from "@/lib/supabase-data";
 function PdfLink({ href }: { href: string }) {
   const openPdf = async () => {
     if (!href.startsWith("data:")) return;
-    const blob = await fetch(href).then((response) => response.blob());
+    const base64 = href.split(",", 2)[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+    const blob = new Blob([bytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank", "noopener,noreferrer");
   };

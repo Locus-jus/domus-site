@@ -1,7 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ArrowRight, Clock, FileText } from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
+import PdfLink from "@/components/ui/PdfLink";
 
 interface ArticleCardProps {
   title: string;
@@ -73,10 +74,7 @@ export default function ArticleCard({
             <span>{new Date(date).toLocaleDateString("pt-BR")}</span>
           </div>
 
-           {pdfUrl ? <a href={pdfUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary hover:text-domus-primary-dark transition-colors group/btn">
-            <FileText className="w-4 h-4" /> Ler PDF
-            <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-          </a> : <span className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary">Ler artigo <ArrowRight className="w-4 h-4" /></span>}
+           {pdfUrl ? <PdfLink href={pdfUrl} label="Ler PDF" /> : <span className="inline-flex items-center gap-2 text-sm font-semibold text-domus-primary">Ler artigo <ArrowRight className="w-4 h-4" /></span>}
         </div>
       </div>
     </article>
