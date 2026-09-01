@@ -63,7 +63,11 @@ export default function EventManager() {
   useEffect(() => {
     let active = true;
     setEvents(loadManagedEvents());
-    try { setHiddenSystemEvents(JSON.parse(localStorage.getItem(HIDDEN_KEY) || "[]")); } catch { setHiddenSystemEvents([]); }
+    try {
+      const hidden = JSON.parse(localStorage.getItem(HIDDEN_KEY) || "[]");
+      setHiddenSystemEvents(hidden);
+      void Promise.all(hidden.map((id: string) => deleteCloudSystemEvent(id)));
+    } catch { setHiddenSystemEvents([]); }
     void fetchCloudEvents().then(async (cloud) => {
       const local = loadManagedEvents();
       if (cloud?.length === 0 && local.length > 0) {
