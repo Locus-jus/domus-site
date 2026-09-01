@@ -13,6 +13,7 @@ interface EventCardProps {
   speakers?: string[];
   status: "open" | "soon" | "closed";
   category: string;
+  href?: string;
   className?: string;
 }
 
@@ -40,11 +41,13 @@ export default function EventCard({
   speakers,
   status,
   category,
+  href,
   className,
 }: EventCardProps) {
   const statusInfo = statusConfig[status];
 
   return (
+    <Link href={href || "#"} className={href ? "block" : "block pointer-events-none"}>
     <article
       className={cn(
         "group relative bg-domus-surface border border-domus-border-light rounded-[var(--radius-lg)] overflow-hidden transition-all duration-300",
@@ -111,5 +114,6 @@ export default function EventCard({
         )}
       </div>
     </article>
+    </Link>
   );
 }

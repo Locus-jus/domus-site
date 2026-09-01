@@ -65,7 +65,8 @@ export default function Events() {
               location={event.location}
               speakers={event.speakers}
               status={event.status}
-              category={event.category}
+               category={event.category}
+               href={`/eventos/${event.id}`}
             />
           ))}
         </div>
